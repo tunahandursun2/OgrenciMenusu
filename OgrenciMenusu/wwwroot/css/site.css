@@ -1,0 +1,43 @@
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { min-height: 100%; margin: 0; }
+body { min-height: 100vh; background: #080879; color: #f6f7ff; font-family: "Segoe UI", Arial, sans-serif; }
+.container { width: 100%; max-width: none; min-height: 100vh; margin: 0; padding: 0; }
+main { min-height: 100vh; }
+.welcome-page, .auth-page { display: grid; min-height: 100vh; place-items: center; padding: 28px 18px; background: #080879; }
+.welcome-panel { width: min(100%, 470px); min-height: 300px; padding: 50px 32px 40px; border-radius: 22px; background: #030333; text-align: center; }
+.welcome-title { margin: 0 0 28px; color: #fff; font-size: clamp(25px, 4vw, 32px); font-weight: 750; }
+.welcome-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+.welcome-actions form { margin: 0; }
+.legacy-button { display: inline-flex; min-width: 112px; min-height: 44px; align-items: center; justify-content: center; padding: 8px 16px; border: 2px solid #fff; border-radius: 5px; background: #2868df; color: #fff; font-size: 16px; font-weight: 700; text-decoration: none; cursor: pointer; }
+.legacy-button:hover { background: #4384ff; color: #fff; }
+.welcome-message { margin: 26px 0 0; color: #ff8a00; font-size: 18px; font-weight: 750; }
+.welcome-message + .welcome-message { margin-top: 14px; }
+.auth-page { background: #080879; }
+.auth-card { position: relative; width: min(100%, 560px); padding: 40px 42px; background: #191b70; }
+.login-card { width: min(100%, 560px); min-height: 300px; padding: 48px 42px; }
+.register-card { width: min(100%, 560px); padding: 36px 42px; }
+.back-link { display: inline-block; margin: 0 0 20px; color: #fff; font-size: 15px; font-weight: 700; text-decoration: none; }
+.back-link:hover, .auth-switch a:hover { color: #8ecbff; }
+.brand-mark { display: none; }
+.eyebrow { margin: 0 0 8px; color: #38bdf8; font-size: 12px; font-weight: 750; letter-spacing: .13em; }
+.auth-card h1 { margin: 0; color: #fff; font-size: 26px; font-weight: 750; }
+.subtitle { margin: 8px 0 24px; color: #d6d9f0; line-height: 1.5; }
+.auth-form { display: grid; gap: 16px; }
+.form-field { display: grid; grid-template-columns: minmax(125px, 1fr) minmax(0, 1.25fr); align-items: center; gap: 12px; }
+.form-field label { color: #fff; font-size: 15px; font-weight: 700; }
+.form-field input { width: 100%; min-height: 42px; padding: 0 11px; border: 1px solid #c9d5ff; border-radius: 2px; outline: none; color: #fff; background: #050534; }
+.form-field input:focus { border-color: #42c2ff; box-shadow: 0 0 0 2px #42c2ff55; }
+.form-field input::placeholder { color: #bdc5e3; }
+.primary-button { justify-self: end; min-width: 118px; min-height: 44px; margin-top: 2px; padding: 7px 16px; border: 2px solid #fff; border-radius: 5px; background: #2868df; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
+.primary-button:hover { background: #4384ff; }
+.auth-switch { margin: 22px 0 0; color: #eceeff; text-align: center; font-size: 14px; }
+.auth-switch a { color: #fff; font-weight: 750; text-decoration: underline; }
+.field-error, .validation-summary { grid-column: 2; color: #ffb3b3; font-size: 13px; }
+.validation-summary:empty { display: none; }
+@media (max-width: 520px) {
+  .welcome-panel { min-height: 0; padding: 40px 22px; }
+  .auth-card, .login-card, .register-card { padding: 30px 22px; }
+  .form-field { grid-template-columns: 1fr; gap: 7px; }
+  .field-error, .validation-summary { grid-column: 1; }
+}

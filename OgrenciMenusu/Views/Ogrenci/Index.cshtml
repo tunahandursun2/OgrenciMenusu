@@ -1,0 +1,5974 @@
+﻿@{
+    ViewData["Title"] = "Öğrenci Menüsü";
+}
+
+<style>
+
+
+    body {
+        margin: 0;
+        background: #f5f7fb !important;
+        color: #18212f;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+    }
+
+
+
+
+    /* ÖDEVLERİM */
+
+    .odev-ekle-form select,
+    .odev-ekle-form input[type="text"],
+    .odev-ekle-form input[type="date"] {
+        background: #ffffff !important;
+        color: #222222 !important;
+        border: 1px solid #d5d8e0 !important;
+    }
+
+        .odev-ekle-form select option {
+            background: #ffffff !important;
+            color: #222222 !important;
+        }
+
+    .odev-ekle-form input::placeholder {
+        color: #888888 !important;
+    }
+
+    .odev-ekle-form select:focus,
+    .odev-ekle-form input:focus {
+        background: #ffffff !important;
+        color: #222222 !important;
+        outline: none;
+        border-color: #5758ee !important;
+    }
+
+    .odev-form-alani select,
+    .odev-form-alani input {
+        background: #ffffff;
+        color: #222222;
+        border: 1px solid #d6d9e0;
+    }
+
+        .odev-form-alani select option {
+            background: #ffffff;
+            color: #222222;
+        }
+
+        .odev-form-alani input::placeholder {
+            color: #888888;
+        }
+
+    .yaklasan-odevler-kutu {
+        position: fixed;
+        right: 25px;
+        bottom: 25px;
+        width: 330px;
+        background: white;
+        border: 1px solid #e3e3ea;
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        z-index: 9999;
+    }
+
+    .yaklasan-odevler-kapat {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        border: none;
+        background: transparent;
+        color: #777;
+        font-size: 22px;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+        .yaklasan-odevler-kapat:hover {
+            color: #333;
+        }
+
+    .yaklasan-odevler-baslik {
+        font-size: 16px;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 12px;
+        padding-right: 20px;
+    }
+
+    .yaklasan-odev {
+        padding: 11px 0;
+        border-bottom: 1px solid #eeeef3;
+    }
+
+        .yaklasan-odev:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+    .yaklasan-odev-bilgi {
+        min-width: 0;
+    }
+
+    .yaklasan-odev-adi {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .yaklasan-odev-ders {
+        font-size: 12px;
+        color: #777;
+        margin-top: 3px;
+    }
+
+    .yaklasan-odev-tarih {
+        font-size: 12px;
+        color: #d93025;
+        margin-top: 5px;
+    }
+
+    @@media (max-width: 700px) {
+
+        .yaklasan-odevler-kutu {
+            right: 15px;
+            left: 15px;
+            bottom: 15px;
+            width: auto;
+        }
+    }
+
+    .gecmis-odevler-kutu {
+        background: white;
+        border: 1px solid #e7e7ee;
+        border-radius: 12px;
+        margin-top: 20px;
+        overflow: hidden;
+    }
+
+    .gecmis-odevler-baslik {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 18px;
+        background: #f5f6fb;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .gecmis-odevler-baslik:hover {
+            background: #eef0f8;
+        }
+
+    #gecmis-odevler-ok {
+        font-size: 13px;
+        color: #666;
+    }
+
+    #gecmis-odevler-listesi {
+        padding: 5px 18px;
+    }
+
+    .gecmis-odev-karti {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #eeeef3;
+    }
+
+        .gecmis-odev-karti:last-child {
+            border-bottom: none;
+        }
+
+    .gecmis-odev-bilgi {
+        min-width: 0;
+    }
+
+    .gecmis-odev-adi {
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .gecmis-odev-ders {
+        font-size: 13px;
+        color: #5758ee;
+        margin-bottom: 5px;
+    }
+
+    .gecmis-odev-tarih {
+        font-size: 12px;
+        color: #777;
+    }
+
+    .gecmis-odev-durum {
+        flex-shrink: 0;
+        color: #188038;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .gecmis-odev-yok {
+        padding: 20px 0;
+        color: #777;
+        font-size: 14px;
+    }
+
+    @@media (max-width: 700px) {
+
+        .gecmis-odev-karti {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+    .aktif-odevler-baslik {
+        font-size: 19px;
+        font-weight: 600;
+        color: #222;
+        margin-bottom: 15px;
+    }
+
+    .odev-ders-grubu {
+        background: white;
+        border: 1px solid #e7e7ee;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+
+    .odev-ders-baslik {
+        background: #f5f6fb;
+        padding: 13px 18px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        border-bottom: 1px solid #e7e7ee;
+    }
+
+    .odev-listesi {
+        padding: 5px 18px;
+    }
+
+    .odev-karti {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #eeeeF3;
+        gap: 15px;
+    }
+
+        .odev-karti:last-child {
+            border-bottom: none;
+        }
+
+    .odev-bilgi {
+        min-width: 0;
+    }
+
+    .odev-adi {
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .odev-tarih {
+        font-size: 13px;
+        color: #777;
+    }
+
+    .odev-islemler {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .odev-tamamla-btn {
+        border: none;
+        background: #5758ee;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .odev-sil-btn {
+        border: 1px solid #e0e0e5;
+        background: white;
+        color: #d93025;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .odev-tamamla-btn:hover {
+        background: #4647d8;
+    }
+
+    .odev-sil-btn:hover {
+        background: #fff5f5;
+    }
+
+    .odevlerim-icerik {
+        width: 100%;
+    }
+
+    .odevlerim-ust {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        margin-left: 15px;
+    }
+
+        .odevlerim-ust h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #222;
+        }
+
+    .odev-ekle-btn {
+        border: none;
+        background: #5758ee;
+        color: white;
+        padding: 11px 18px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .odev-ekle-btn:hover {
+            background: #4647d8;
+        }
+
+    .odev-ekle-form {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e7e7ee;
+    }
+
+        .odev-ekle-form h3 {
+            margin: 0 0 22px 0;
+            font-size: 19px;
+            color: #222;
+        }
+
+    .odev-form-satir {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+        .odev-form-satir label {
+            width: 130px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .odev-form-satir input,
+        .odev-form-satir select {
+            flex: 1;
+            max-width: 420px;
+            height: 42px;
+            padding: 0 12px;
+            border: 1px solid #d8d8e2;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+            .odev-form-satir input:focus,
+            .odev-form-satir select:focus {
+                border-color: #5758ee;
+            }
+
+    .odev-form-alt {
+        display: flex;
+        gap: 10px;
+        margin-left: 130px;
+        margin-top: 8px;
+    }
+
+    .odev-kaydet-btn {
+        border: none;
+        background: #5758ee;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 7px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+        .odev-kaydet-btn:hover {
+            background: #4647d8;
+        }
+
+    .odev-iptal-btn {
+        border: 1px solid #d5d5df;
+        background: white;
+        color: #555;
+        padding: 10px 18px;
+        border-radius: 7px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+        .odev-iptal-btn:hover {
+            background: #f5f5f8;
+        }
+
+    .odev-hata {
+        margin-top: 15px;
+        color: #d93025;
+        font-size: 13px;
+    }
+
+    .odev-basari {
+        margin-top: 15px;
+        color: #188038;
+        font-size: 13px;
+    }
+
+    #aktif-odevler-alani {
+        width: 100%;
+    }
+
+    @@media (max-width: 700px) {
+
+        .odevlerim-ust {
+            align-items: flex-start;
+            gap: 15px;
+            flex-direction: column;
+        }
+
+        .odev-form-satir {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+            .odev-form-satir label {
+                width: auto;
+            }
+
+            .odev-form-satir input,
+            .odev-form-satir select {
+                width: 100%;
+                max-width: none;
+            }
+
+        .odev-form-alt {
+            margin-left: 0;
+        }
+    }
+
+
+
+    .konu-ekle-ders-karti {
+        width: 100%;
+        margin-bottom: 15px;
+        border: 1px solid #e6e9ef;
+        border-radius: 10px;
+        background: #ffffff;
+        overflow: hidden;
+    }
+
+    .konu-ekle-ders-baslik {
+        padding: 13px 16px;
+        background: #f5f7fb;
+        border-bottom: 1px solid #e6e9ef;
+        font-size: 14px;
+        font-weight: 700;
+        color: #303642;
+    }
+
+    .konu-ekle-ders-konulari {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .konu-ekle-konu-satiri {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 16px;
+        border-bottom: 1px solid #eef0f4;
+        font-size: 13px;
+        color: #454c59;
+    }
+
+        .konu-ekle-konu-satiri:last-child {
+            border-bottom: none;
+        }
+
+
+    /* AKADEMİK TAKİP */
+
+    .konu-ekle-alani select,
+    .konu-ekle-alani input {
+        background: #ffffff;
+        color: #303642;
+        color-scheme: light;
+    }
+
+        .konu-ekle-alani select option {
+            background: #ffffff;
+            color: #303642;
+        }
+
+    .konu-ekle-mevcut {
+        margin-top: 35px;
+    }
+
+        .konu-ekle-mevcut h3 {
+            margin: 0 0 15px 0;
+            font-size: 17px;
+            color: #303642;
+        }
+
+    .konu-ekle-satiri {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        padding: 13px 15px;
+        margin-bottom: 10px;
+        border: 1px solid #e6e9ef;
+        border-radius: 9px;
+        background: #ffffff;
+    }
+
+    .konu-ekle-satiri-bilgi {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+        .konu-ekle-satiri-bilgi strong {
+            font-size: 13px;
+            color: #303642;
+        }
+
+        .konu-ekle-satiri-bilgi span {
+            font-size: 13px;
+            color: #7a8392;
+        }
+
+    .konu-sil-butonu {
+        border: none;
+        background: #e74c3c;
+        color: white;
+        padding: 7px 12px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .konu-sil-butonu:hover {
+            background: #c0392b;
+        }
+
+    .konu-ekle-bos {
+        font-size: 13px;
+        color: #7a8392;
+        padding: 10px 0;
+    }
+
+
+    .konu-ekle-alani {
+        width: 100%;
+        max-width: 600px;
+    }
+
+        .konu-ekle-alani h3 {
+            margin: 0 0 20px 0;
+            font-size: 18px;
+            color: #303642;
+        }
+
+        .konu-ekle-alani select,
+        .konu-ekle-alani input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border: 1px solid #dfe3ea;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+            .konu-ekle-alani select:focus,
+            .konu-ekle-alani input:focus {
+                border-color: #5758ee;
+            }
+
+        .konu-ekle-alani button {
+            border: none;
+            background: #5758ee;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+            .konu-ekle-alani button:hover {
+                background: #4647d8;
+            }
+
+    #konu-ekle-mesaj {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #5758ee;
+    }
+
+    .konu-ders-karti {
+        width: 100%;
+        border: 1px solid #e6e9ef;
+        border-radius: 10px;
+        padding: 18px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    .konu-ders-baslik {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        color: #303642;
+    }
+
+        .konu-ders-baslik span {
+            font-size: 12px;
+            color: #7a8392;
+        }
+
+    .konu-listesi {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .konu-satiri {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #454c59;
+        cursor: pointer;
+    }
+
+        .konu-satiri input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+    .konu-tamamlandi {
+        text-decoration: line-through;
+        color: #9299a5;
+    }
+
+
+    .akademik-icerik {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .akademik-sekmeleri {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid #e6e9ef;
+        padding-bottom: 15px;
+        margin-bottom: 35px;
+    }
+
+    .akademik-sekmesi {
+        border: none;
+        background: transparent;
+        color: #7a8392;
+        padding: 10px 17px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .akademik-sekmesi:hover {
+            background: #f0efff;
+            color: #5758ee;
+        }
+
+        .akademik-sekmesi.aktif {
+            background: #5758ee;
+            color: white;
+        }
+
+    .akademik-bos-icerik {
+        width: 100%;
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8a93a3;
+        font-size: 14px;
+    }
+
+
+    .program-ders-blogu-adi {
+        padding-right: 28px;
+        box-sizing: border-box;
+    }
+
+    .program-ders-blogu {
+        position: absolute;
+    }
+
+        .program-ders-blogu .program-ders-sil-butonu {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            margin: 0;
+            padding: 2px 5px;
+            font-size: 8px;
+            line-height: 1;
+            z-index: 10;
+        }
+
+    .ders-programi-baslik-satiri {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+        .ders-programi-baslik-satiri .program-ders-sil-butonu {
+            background: #e53935;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+            .ders-programi-baslik-satiri .program-ders-sil-butonu:hover {
+                background: #c62828;
+            }
+
+    .program-ders-blogu .program-ders-sil-butonu {
+        background: #e53935;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 3px 7px;
+        font-size: 9px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 3px;
+    }
+
+        .program-ders-blogu .program-ders-sil-butonu:hover {
+            background: #c62828;
+        }
+
+    .ogrenci-duzeni {
+        min-height: calc(100vh - 78px);
+        display: flex;
+        background: #f5f7fb;
+    }
+
+    .yan-menu {
+        width: 245px;
+        min-height: calc(100vh - 78px);
+        background: #ffffff;
+        border-right: 1px solid #e6e9ef;
+        padding: 32px 20px 25px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .yan-menu-baslik {
+        margin: 0 0 35px 10px;
+        color: #18212f;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -.4px;
+    }
+
+        .yan-menu-baslik span {
+            color: #5758ee;
+        }
+
+    .kullanici-adi {
+        margin: -20px 10px 28px;
+        color: #7a8392;
+        font-size: 13px;
+    }
+
+        .kullanici-adi strong {
+            color: #5758ee;
+            font-weight: 700;
+        }
+
+    .menu-listesi {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .menu-butonu {
+        width: 100%;
+        min-height: 50px;
+        border: none;
+        border-radius: 10px;
+        background: transparent;
+        color: #697386;
+        padding: 0 14px;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 650;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .menu-butonu:hover {
+            background: #f0efff;
+            color: #5758ee;
+        }
+
+    .yan-menu-alt {
+        margin-top: auto;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .tarih-saat {
+        width: 100%;
+        padding-top: 20px;
+        border-top: 1px solid #e6e9ef;
+        color: #7a8392;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+        .tarih-saat .saat {
+            color: #18212f;
+            font-size: 17px;
+            font-weight: 750;
+        }
+
+    .cikis-butonu {
+        display: block;
+        width: 100%;
+        margin-top: 12px;
+        height: 40px;
+        border: 1px solid #eadfe2;
+        border-radius: 8px;
+        background: #fff7f8;
+        color: #c35a6d;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .cikis-butonu:hover {
+            background: #fdecef;
+        }
+
+    .icerik-alani {
+        flex: 1;
+        padding: 45px 50px;
+        box-sizing: border-box;
+        background: #f5f7fb;
+        overflow-x: auto;
+    }
+
+    .icerik-yer-tutucu {
+        width: 100%;
+        min-height: 500px;
+        border: 1px dashed #dfe3ea;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #a2a9b5;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    /* DERS EKLE */
+
+    .ders-ekle-icerik {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ders-ekle-baslik {
+        margin: 0 0 8px;
+        color: #18212f;
+        font-size: 27px;
+        font-weight: 800;
+    }
+
+    .ders-ekle-aciklama {
+        margin: 0 0 30px;
+        color: #8a92a0;
+        font-size: 13px;
+    }
+
+    .ders-ekle-duzeni {
+        display: grid;
+        grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+        gap: 25px;
+        align-items: start;
+    }
+
+    .ders-ekle-karti {
+        background: #ffffff;
+        border: 1px solid #e6e9ef;
+        border-radius: 16px;
+        padding: 25px;
+        box-sizing: border-box;
+    }
+
+    .ders-ekle-kart-baslik {
+        margin: 0 0 18px;
+        color: #18212f;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .ders-girdi-etiketi {
+        display: block;
+        margin-bottom: 8px;
+        color: #697386;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .ders-girdisi {
+        width: 100%;
+        height: 45px;
+        border: 1px solid #dfe3ea;
+        border-radius: 9px;
+        padding: 0 12px;
+        box-sizing: border-box;
+        outline: none;
+        color: #18212f;
+        background: #fafaff;
+        font-size: 13px;
+    }
+
+        .ders-girdisi:focus {
+            border-color: #5758ee;
+            background: #ffffff;
+        }
+
+    .ders-kaydet-butonu {
+        width: 100%;
+        height: 45px;
+        margin-top: 12px;
+        border: none;
+        border-radius: 9px;
+        background: #5758ee;
+        color: white;
+        font-size: 13px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .ders-kaydet-butonu:hover {
+            background: #4849d9;
+        }
+
+    .ders-mesaji {
+        display: none;
+        margin-top: 12px;
+        color: #5758ee;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .ders-listesi {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .ders-ogesi {
+        min-height: 48px;
+        padding: 0 10px 0 14px;
+        background: #fafaff;
+        border: 1px solid #e6e9ef;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: #4f5969;
+        font-size: 13px;
+        font-weight: 650;
+        box-sizing: border-box;
+    }
+
+    .ders-sil-butonu {
+        border: 1px solid #eadfe2;
+        background: #fff7f8;
+        color: #c35a6d;
+        border-radius: 7px;
+        padding: 7px 10px;
+        font-size: 11px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .ders-sil-butonu:hover {
+            background: #fdecef;
+        }
+
+    .ders-bos {
+        padding: 30px 15px;
+        border: 1px dashed #dfe3ea;
+        border-radius: 10px;
+        color: #a2a9b5;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    /* DERS PROGRAMI */
+
+    .ders-programi-icerik {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ders-programi-baslik {
+        margin: 0 0 8px;
+        color: #18212f;
+        font-size: 27px;
+        font-weight: 800;
+    }
+
+    .ders-programi-aciklama {
+        margin: 0 0 25px;
+        color: #8a92a0;
+        font-size: 13px;
+    }
+
+    .ders-programi-duzeni {
+        display: grid;
+        grid-template-columns: 190px minmax(850px, 1fr);
+        gap: 20px;
+        align-items: start;
+    }
+
+    .program-dersler-karti {
+        background: #ffffff;
+        border: 1px solid #e6e9ef;
+        border-radius: 14px;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    .program-dersler-baslik {
+        margin: 2px 0 13px;
+        color: #18212f;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .program-ders-listesi {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .program-ders-ogesi {
+        padding: 10px;
+        background: #fafaff;
+        border: 1px solid #e6e9ef;
+        border-radius: 9px;
+        box-sizing: border-box;
+    }
+
+    .program-ders-adi {
+        display: block;
+        margin-bottom: 8px;
+        color: #4f5969;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.35;
+        word-break: break-word;
+    }
+
+    .program-ekle-butonu {
+        width: 100%;
+        height: 30px;
+        border: 1px solid #dcd9ff;
+        border-radius: 7px;
+        background: #f5f4ff;
+        color: #5758ee;
+        font-size: 10px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .program-ekle-butonu:hover {
+            background: #eceaff;
+        }
+
+    .program-ders-bos {
+        padding: 20px 8px;
+        border: 1px dashed #dfe3ea;
+        border-radius: 9px;
+        color: #a2a9b5;
+        font-size: 11px;
+        text-align: center;
+    }
+
+    .program-tablo-kapsayici {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e6e9ef;
+        border-radius: 14px;
+        overflow: auto;
+        box-sizing: border-box;
+    }
+
+    .program-tablosu {
+        min-width: 850px;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+    }
+
+        .program-tablosu th,
+        .program-tablosu td {
+            border-right: 1px solid #e6e9ef;
+            border-bottom: 1px solid #e6e9ef;
+            box-sizing: border-box;
+        }
+
+            .program-tablosu th:last-child,
+            .program-tablosu td:last-child {
+                border-right: none;
+            }
+
+        .program-tablosu tr:last-child td {
+            border-bottom: none;
+        }
+
+    .program-gun-basligi {
+        height: 45px;
+        background: #fafaff;
+        color: #18212f;
+        font-size: 11px;
+        font-weight: 800;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .program-saat-basligi {
+        width: 48px;
+        min-width: 48px;
+        background: #fafaff;
+        color: #8a92a0;
+        font-size: 10px;
+        font-weight: 750;
+        text-align: center;
+    }
+
+    .program-saat {
+        height: 42px;
+        background: #ffffff;
+        color: #a0a7b2;
+        font-size: 10px;
+        font-weight: 700;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+    }
+
+    .program-hucre {
+        height: 42px;
+        background: #ffffff;
+        vertical-align: middle;
+        transition: .15s;
+        position: relative;
+        padding: 0;
+    }
+
+        .program-hucre:hover {
+            background: #fafaff;
+        }
+
+    /* DERS BLOĞU */
+
+    .program-ders-blogu {
+        position: absolute;
+        left: 3px;
+        right: 3px;
+        top: 3px;
+        border: 1px solid #d8d6ff;
+        border-radius: 7px;
+        background: #f0efff;
+        color: #5758ee;
+        box-sizing: border-box;
+        padding: 4px 6px;
+        z-index: 5;
+        overflow: hidden;
+        font-size: 10px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .program-ders-blogu-saati {
+        display: block;
+        margin-top: 2px;
+        color: #8586c9;
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+    /* DERS PROGRAMI MODAL */
+
+    .program-modal-arka-plan {
+        position: fixed;
+        inset: 0;
+        background: rgba(24, 33, 47, .35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .program-modal {
+        width: 380px;
+        max-width: 100%;
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 25px;
+        box-sizing: border-box;
+        box-shadow: 0 20px 50px rgba(24, 33, 47, .18);
+    }
+
+    .program-modal-baslik {
+        margin: 0 0 6px;
+        color: #18212f;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .program-modal-ders {
+        margin: 0 0 22px;
+        color: #5758ee;
+        font-size: 13px;
+        font-weight: 750;
+    }
+
+    .program-modal-alan {
+        margin-bottom: 15px;
+    }
+
+    .program-modal-etiket {
+        display: block;
+        margin-bottom: 7px;
+        color: #697386;
+        font-size: 12px;
+        font-weight: 750;
+    }
+
+    .program-modal-select {
+        width: 100%;
+        height: 42px;
+        border: 1px solid #dfe3ea;
+        border-radius: 8px;
+        padding: 0 10px;
+        background: #fafaff;
+        color: #18212f;
+        font-size: 13px;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+        .program-modal-select:focus {
+            border-color: #5758ee;
+            background: #ffffff;
+        }
+
+    .program-modal-butonlari {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .program-modal-butonu {
+        flex: 1;
+        height: 42px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 750;
+        cursor: pointer;
+    }
+
+    .program-modal-iptal {
+        border: 1px solid #e6e9ef;
+        background: #fafaff;
+        color: #697386;
+    }
+
+    .program-modal-ekle {
+        border: none;
+        background: #5758ee;
+        color: #ffffff;
+    }
+
+        .program-modal-ekle:hover {
+            background: #4849d9;
+        }
+
+    /* YKS */
+
+    .yks-icerik {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .yks-sekmeleri {
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid #e6e9ef;
+        padding-bottom: 15px;
+        margin-bottom: 35px;
+    }
+
+    .yks-sekmesi {
+        border: none;
+        background: transparent;
+        color: #7a8392;
+        padding: 10px 17px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .yks-sekmesi:hover {
+            background: #f0efff;
+            color: #5758ee;
+        }
+
+        .yks-sekmesi.aktif {
+            background: #5758ee;
+            color: white;
+        }
+
+    .geri-sayim-alani {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+        text-align: center;
+    }
+
+    .geri-sayim-etiketi {
+        margin: 0 0 10px;
+        color: #5758ee;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .8px;
+    }
+
+    .geri-sayim-alani h2 {
+        margin: 0 0 30px;
+        color: #18212f;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    .geri-sayim-kutulari {
+        display: flex;
+        gap: 14px;
+    }
+
+    .geri-sayim-kutusu {
+        min-width: 95px;
+        padding: 18px 15px;
+        border: 1px solid #e6e9ef;
+        border-radius: 14px;
+        background: #fafaff;
+        box-sizing: border-box;
+    }
+
+    .geri-sayim-sayisi {
+        display: block;
+        color: #5758ee;
+        font-size: 28px;
+        font-weight: 800;
+    }
+
+    .geri-sayim-birimi {
+        display: block;
+        margin-top: 3px;
+        color: #8a92a0;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .sinav-tarihleri {
+        display: flex;
+        gap: 14px;
+        margin-top: 38px;
+    }
+
+    .sinav-tarihi {
+        min-width: 180px;
+        padding: 14px 22px;
+        background: #fafaff;
+        border: 1px solid #e6e9ef;
+        border-radius: 12px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .sinav-tarihi-basligi {
+        display: block;
+        margin-bottom: 5px;
+        color: #5758ee;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .5px;
+    }
+
+    .sinav-tarihi-metni {
+        display: block;
+        color: #697386;
+        font-size: 14px;
+        font-weight: 650;
+    }
+
+    /* NET */
+
+    .net-icerik {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .net-baslik {
+        margin: 0 0 8px;
+        color: #18212f;
+        font-size: 27px;
+        font-weight: 800;
+    }
+
+    .net-aciklama {
+        margin: 0 0 30px;
+        color: #8a92a0;
+        font-size: 13px;
+    }
+
+    .net-bolumleri {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        align-items: start;
+    }
+
+    .net-karti {
+        background: #ffffff;
+        border: 1px solid #e6e9ef;
+        border-radius: 16px;
+        padding: 25px;
+        box-sizing: border-box;
+    }
+
+    .net-kart-basligi {
+        margin: 0 0 5px;
+        color: #18212f;
+        font-size: 21px;
+        font-weight: 800;
+    }
+
+    .net-kart-alt-basligi {
+        margin: 0 0 22px;
+        color: #8a92a0;
+        font-size: 12px;
+    }
+
+    .ders-basligi {
+        margin: 20px 0 10px;
+        color: #5758ee;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+        .ders-basligi:first-child {
+            margin-top: 0;
+        }
+
+    .ders-baslik-satiri {
+        display: grid;
+        grid-template-columns: minmax(100px, 1fr) 75px 75px 65px;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+        padding-bottom: 7px;
+        border-bottom: 1px solid #e6e9ef;
+    }
+
+        .ders-baslik-satiri span {
+            color: #8a92a0;
+            font-size: 11px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+            .ders-baslik-satiri span:first-child {
+                text-align: left;
+            }
+
+    .ders-satiri {
+        display: grid;
+        grid-template-columns: minmax(100px, 1fr) 75px 75px 65px;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .ders-adi {
+        color: #4f5969;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+    .ders-net {
+        color: #5758ee;
+        font-size: 13px;
+        font-weight: 800;
+        text-align: center;
+    }
+
+    .net-girdisi {
+        width: 100%;
+        height: 38px;
+        border: 1px solid #dfe3ea;
+        border-radius: 8px;
+        padding: 0 9px;
+        box-sizing: border-box;
+        outline: none;
+        color: #18212f;
+        background: #fafaff;
+        font-size: 13px;
+    }
+
+        .net-girdisi:focus {
+            border-color: #5758ee;
+            background: #ffffff;
+        }
+
+    .net-sonucu {
+        margin-top: 22px;
+        padding: 17px;
+        border-radius: 12px;
+        background: #f5f4ff;
+        border: 1px solid #e5e3ff;
+    }
+
+    .net-sonuc-satiri {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 7px;
+    }
+
+        .net-sonuc-satiri:last-child {
+            margin-bottom: 0;
+        }
+
+    .net-sonuc-etiketi {
+        color: #697386;
+        font-size: 13px;
+        font-weight: 650;
+    }
+
+    .net-sonuc-degeri {
+        color: #5758ee;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .net-sonuc-toplam {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+    }
+
+        .net-sonuc-toplam .net-sonuc-etiketi {
+            color: #18212f;
+            font-weight: 800;
+        }
+
+        .net-sonuc-toplam .net-sonuc-degeri {
+            font-size: 20px;
+        }
+
+    .net-islemleri {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .net-islem-butonu {
+        flex: 1;
+        height: 42px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .hesapla-butonu {
+        border: none;
+        background: #5758ee;
+        color: white;
+    }
+
+        .hesapla-butonu:hover {
+            background: #4849d9;
+        }
+
+    .kaydet-butonu {
+        border: 1px solid #dcd9ff;
+        background: #f5f4ff;
+        color: #5758ee;
+    }
+
+        .kaydet-butonu:hover {
+            background: #eceaff;
+        }
+
+    .kaydet-mesaji {
+        display: none;
+        margin-top: 10px;
+        text-align: center;
+        color: #7a8392;
+        font-size: 11px;
+    }
+
+    .yer-tutucu-icerik {
+        width: 100%;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #a2a9b5;
+        font-size: 14px;
+    }
+
+    @@media (max-width: 1200px) {
+
+        .ders-programi-duzeni {
+            grid-template-columns: 170px minmax(850px, 1fr);
+        }
+    }
+
+    @@media (max-width: 1000px) {
+
+        .net-bolumleri,
+        .ders-ekle-duzeni {
+            grid-template-columns: 1fr;
+        }
+
+        .ders-programi-duzeni {
+            grid-template-columns: 1fr;
+        }
+
+        .program-dersler-karti {
+            width: 100%;
+        }
+
+        .program-ders-listesi {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 700px) {
+
+        .yan-menu {
+            width: 205px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .icerik-alani {
+            padding: 30px 20px;
+        }
+
+        .yan-menu-baslik {
+            margin-left: 5px;
+        }
+
+        .kullanici-adi {
+            margin-left: 5px;
+        }
+
+        .geri-sayim-kutulari {
+            gap: 7px;
+        }
+
+        .geri-sayim-kutusu {
+            min-width: 60px;
+            padding: 14px 8px;
+        }
+
+        .geri-sayim-sayisi {
+            font-size: 22px;
+        }
+
+        .sinav-tarihler {
+            gap: 8px;
+        }
+
+        .sinav-tarihi {
+            min-width: 140px;
+            padding: 12px 10px;
+        }
+
+        .net-karti,
+        .ders-ekle-karti {
+            padding: 18px;
+        }
+
+        .ders-baslik-satiri,
+        .ders-satiri {
+            grid-template-columns: minmax(80px, 1fr) 65px 65px 55px;
+        }
+
+        .program-ders-listesi {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .akademik-konu-ekle-butonu {
+        border: none;
+        background: #5758ee;
+        color: white;
+        padding: 10px 17px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .akademik-konu-ekle-butonu:hover {
+            background: #4647d8;
+        }
+
+    .konu-takip-alani {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+    }
+
+    .konu-kartlari {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+        .konu-kartlari .konu-ders-karti {
+            flex: 1 1 280px;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+    .akademik-konu-ekle-butonu-alani {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        box-sizing: border-box;
+        padding-top: 10px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<main class="ogrenci-duzeni">
+
+    <aside class="yan-menu">
+
+        <h1 class="yan-menu-baslik">
+            Öğrenci <span>Menüsü</span>
+        </h1>
+
+        <p class="kullanici-adi">
+            Hoş geldin, <strong>@User.Identity?.Name</strong>
+        </p>
+
+        <nav class="menu-listesi">
+
+            <button class="menu-butonu"
+                    type="button"
+                    onclick="dersPrograminiAc()">
+                Ders Programı
+            </button>
+
+            <button class="menu-butonu"
+                    type="button"
+                    onclick="akademikTakipAc()">
+                Akademik Takip
+            </button>
+
+            <button class="menu-butonu"
+                    type="button"
+                    onclick="yksAc()">
+                YKS
+            </button>
+
+            <button class="menu-butonu" type="button">
+                İstatistik
+            </button>
+
+            <button class="menu-butonu"
+                    type="button"
+                    onclick="dersEkleAc()">
+                Derslerim
+            </button>
+
+        </nav>
+
+        <div class="yan-menu-alt">
+
+            <div class="tarih-saat">
+
+                <div id="guncel-tarih"></div>
+
+                <div id="guncel-saat" class="saat"></div>
+
+                <form asp-controller="Hesap"
+                      asp-action="Cikis"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="cikis-butonu">
+                        Çıkış Yap
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <section class="icerik-alani">
+
+        <div class="icerik-yer-tutucu">
+            İçeriklerinizi burada göreceksiniz.
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+
+    /* TARİH VE SAAT */
+
+    function tarihSaatGuncelle() {
+
+        const simdi = new Date();
+
+        const gun = String(simdi.getDate()).padStart(2, '0');
+        const ay = String(simdi.getMonth() + 1).padStart(2, '0');
+        const yil = simdi.getFullYear();
+
+        const saat = String(simdi.getHours()).padStart(2, '0');
+        const dakika = String(simdi.getMinutes()).padStart(2, '0');
+
+        document.getElementById("guncel-tarih").textContent =
+            `${gun}.${ay}.${yil}`;
+
+        document.getElementById("guncel-saat").textContent =
+            `${saat}.${dakika}`;
+    }
+
+    tarihSaatGuncelle();
+
+    setInterval(tarihSaatGuncelle, 1000);
+
+    yaklasanOdevleriGetir();
+
+
+    /* ==========================================
+       DERS PROGRAMI
+       ========================================== */
+
+    let programDersleri = [];
+
+
+    function dersPrograminiAc() {
+
+        document.querySelector(".icerik-yer-tutucu").innerHTML = `
+
+                    <div class="ders-programi-icerik">
+
+                            <div class="ders-programi-baslik-satiri">
+
+            <h2 class="ders-programi-baslik">
+                Ders Programı
+            </h2>
+
+            <button type="button"
+                    id="program-ders-sil-butonu"
+                    class="program-ders-sil-butonu"
+                    onclick="programDersSilModunuDegistir()">
+                Ders Sil
+            </button>
+
+        </div>
+
+                        <p class="ders-programi-aciklama">
+                            Haftalık ders programını buradan oluşturabilirsin.
+                        </p>
+
+                        <div class="ders-programi-duzeni">
+
+                            <div class="program-dersler-karti">
+
+                                <h3 class="program-dersler-baslik">
+                                    Derslerim
+                                </h3>
+
+                                <div id="program-ders-listesi"
+                                     class="program-ders-listesi">
+
+                                    <div class="program-ders-bos">
+                                        Dersler yükleniyor...
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="program-tablo-kapsayici">
+
+                                <table class="program-tablosu">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th class="program-saat-basligi">
+                                                Saat
+                                            </th>
+
+                                            <th class="program-gun-basligi">
+                                                Pazartesi
+                                            </th>
+
+                                            <th class="program-gun-basligi">
+                                                Salı
+                                            </th>
+
+                                            <th class="program-gun-basligi">
+                                                Çarşamba
+                                            </th>
+
+                                            <th class="program-gun-basligi">
+                                                Perşembe
+                                            </th>
+
+                                            <th class="program-gun-basligi">
+                                                Cuma
+                                            </th>
+
+                                            <th class="program-gun-basligi">
+                                                Cumartesi
+                                            </th>
+
+                                            <th class="program-gun-basligi">
+                                                Pazar
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody>
+
+                                        <tr>
+                                            <td class="program-saat">06</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="6"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">07</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="7"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="7"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="7"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="7"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="7"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="7"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="7"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">08</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="8"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="8"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="8"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="8"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="8"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="8"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="8"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">09</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="9"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="9"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="9"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="9"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="9"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="9"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="9"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">10</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="10"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="10"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="10"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="10"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="10"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="10"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="10"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">11</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="11"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="11"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="11"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="11"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="11"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="11"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="11"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">12</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="12"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="12"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="12"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="12"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="12"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="12"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="12"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">13</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="13"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="13"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="13"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="13"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="13"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="13"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="13"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">14</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="14"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="14"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="14"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="14"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="14"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="14"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="14"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">15</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="15"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="15"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="15"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="15"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="15"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="15"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="15"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">16</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="16"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="16"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="16"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="16"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="16"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="16"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="16"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">17</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="17"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="17"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="17"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="17"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="17"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="17"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="17"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">18</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="18"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="18"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="18"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="18"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="18"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="18"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="18"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">19</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="19"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="19"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="19"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="19"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="19"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="19"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="19"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">20</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="20"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="20"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="20"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="20"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="20"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="20"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="20"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">21</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="21"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="21"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="21"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="21"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="21"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="21"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="21"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">22</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="22"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="22"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="22"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="22"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="22"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="22"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="22"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">23</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="23"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="23"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="23"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="23"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="23"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="23"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="23"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">00</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="0"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="0"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="0"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="0"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="0"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="0"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="0"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">01</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="1"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="1"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="1"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="1"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="1"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="1"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="1"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">02</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="2"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="2"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="2"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="2"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="2"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="2"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="2"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">03</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="3"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="3"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="3"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="3"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="3"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="3"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="3"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">04</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="4"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="4"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="4"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="4"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="4"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="4"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="4"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">05</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="5"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="5"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="5"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="5"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="5"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="5"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="5"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="program-saat">06</td>
+                                            <td class="program-hucre" data-gun="0" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="1" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="2" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="3" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="4" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="5" data-saat="6"></td>
+                                            <td class="program-hucre" data-gun="6" data-saat="6"></td>
+                                        </tr>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+
+        programDersleriGetir();
+        programDersleriniCiz();
+        fetch("/Ogrenci/DersPrograminiGetir")
+            .then(response => response.json())
+            .then(data => {
+
+                if (!data.success) {
+                    return;
+                }
+
+                programDersleri = data.dersler.map(ders => ({
+                    id: ders.id,
+                    dersId: ders.dersId,
+                    dersAdi: ders.dersAdi,
+                    gun: ders.gun,
+                    saat: ders.saat,
+                    dakika: ders.dakika,
+                    bitisSaat: ders.bitisSaat,
+                    bitisDakika: ders.bitisDakika
+                }));
+
+                programDersleriniCiz();
+            });
+    }
+
+
+    let programDersSilModu = false;
+
+
+    function programDersSilModunuDegistir() {
+
+        programDersSilModu = !programDersSilModu;
+
+        const buton =
+            document.getElementById("program-ders-sil-butonu");
+
+        if (buton) {
+
+            if (programDersSilModu) {
+                buton.textContent = "Ders Silmeyi Kapat";
+                buton.classList.add("aktif");
+            }
+            else {
+                buton.textContent = "Ders Sil";
+                buton.classList.remove("aktif");
+            }
+        }
+
+        programDersleriniCiz();
+    }
+
+
+    /* PROGRAMDAKİ DERSLERİ GETİR */
+
+    async function programDersleriGetir() {
+
+        const liste =
+            document.getElementById("program-ders-listesi");
+
+        if (!liste) {
+            return;
+        }
+
+        try {
+
+            const cevap =
+                await fetch("/Ogrenci/DersleriGetir");
+
+            const veri =
+                await cevap.json();
+
+            if (!veri.success ||
+                !veri.dersler ||
+                veri.dersler.length === 0) {
+
+                liste.innerHTML = `
+                            <div class="program-ders-bos">
+                                Henüz ders eklenmemiş.
+                            </div>
+                        `;
+
+                return;
+            }
+
+            liste.innerHTML = "";
+
+            veri.dersler.forEach(ders => {
+
+                const oge =
+                    document.createElement("div");
+
+                oge.className =
+                    "program-ders-ogesi";
+
+                const ad =
+                    document.createElement("span");
+
+                ad.className =
+                    "program-ders-adi";
+
+                ad.textContent =
+                    ders.dersAdi;
+
+                const buton =
+                    document.createElement("button");
+
+                buton.type = "button";
+
+                buton.className =
+                    "program-ekle-butonu";
+
+                buton.textContent =
+                    "Ders Programına Ekle";
+
+                buton.onclick = function () {
+
+                    programDersEklePenceresiAc(
+                        ders.id,
+                        ders.dersAdi
+                    );
+
+                };
+
+                oge.appendChild(ad);
+                oge.appendChild(buton);
+
+                liste.appendChild(oge);
+
+            });
+
+        }
+        catch (hata) {
+
+            liste.innerHTML = `
+                        <div class="program-ders-bos">
+                            Dersler yüklenirken bir hata oluştu.
+                        </div>
+                    `;
+
+            console.error(hata);
+        }
+    }
+
+
+    /* DERS EKLEME PENCERESİ */
+
+    function programDersEklePenceresiAc(dersId, dersAdi) {
+
+        const eskiModal =
+            document.getElementById("program-modal");
+
+        if (eskiModal) {
+            eskiModal.remove();
+        }
+
+        let saatSecenekleri = "";
+
+        const saatler = [
+            6, 7, 8, 9, 10, 11, 12, 13,
+            14, 15, 16, 17, 18, 19, 20, 21,
+            22, 23, 0, 1, 2, 3, 4, 5
+        ];
+
+        saatler.forEach(saat => {
+
+            const gosterilenSaat =
+                String(saat).padStart(2, "0");
+
+            saatSecenekleri +=
+                `<option value="${saat}">${gosterilenSaat}</option>`;
+
+        });
+
+
+        let dakikaSecenekleri = "";
+
+        for (let dakika = 0; dakika < 60; dakika += 5) {
+
+            const gosterilenDakika =
+                String(dakika).padStart(2, "0");
+
+            dakikaSecenekleri +=
+                `<option value="${dakika}">${gosterilenDakika}</option>`;
+
+        }
+
+
+        const modal =
+            document.createElement("div");
+
+        modal.id =
+            "program-modal";
+
+        modal.className =
+            "program-modal-arka-plan";
+
+        modal.innerHTML = `
+
+                    <div class="program-modal">
+
+                        <h3 class="program-modal-baslik">
+                            Ders Programına Ekle
+                        </h3>
+
+                        <div class="program-modal-ders">
+                            ${programHtmlGuvenliMetin(dersAdi)}
+                        </div>
+
+                        <div class="program-modal-alan">
+
+                            <label class="program-modal-etiket">
+                                Gün
+                            </label>
+
+                            <select id="program-gun"
+                                    class="program-modal-select">
+
+                                <option value="0">Pazartesi</option>
+                                <option value="1">Salı</option>
+                                <option value="2">Çarşamba</option>
+                                <option value="3">Perşembe</option>
+                                <option value="4">Cuma</option>
+                                <option value="5">Cumartesi</option>
+                                <option value="6">Pazar</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="program-modal-alan">
+
+                            <label class="program-modal-etiket">
+                                Başlangıç Saati
+                            </label>
+
+                            <select id="program-baslangic-saat"
+                                    class="program-modal-select">
+
+                                ${saatSecenekleri}
+
+                            </select>
+
+                        </div>
+
+                        <div class="program-modal-alan">
+
+                            <label class="program-modal-etiket">
+                                Başlangıç Dakikası
+                            </label>
+
+                            <select id="program-baslangic-dakika"
+                                    class="program-modal-select">
+
+                                ${dakikaSecenekleri}
+
+                            </select>
+
+                        </div>
+
+                        <div class="program-modal-alan">
+
+                            <label class="program-modal-etiket">
+                                Bitiş Saati
+                            </label>
+
+                            <select id="program-bitis-saat"
+                                    class="program-modal-select">
+
+                                ${saatSecenekleri}
+
+                            </select>
+
+                        </div>
+
+                        <div class="program-modal-alan">
+
+                            <label class="program-modal-etiket">
+                                Bitiş Dakikası
+                            </label>
+
+                            <select id="program-bitis-dakika"
+                                    class="program-modal-select">
+
+                                ${dakikaSecenekleri}
+
+                            </select>
+
+                        </div>
+
+                        <div class="program-modal-butonlari">
+
+                            <button type="button"
+                                    class="program-modal-butonu program-modal-iptal"
+                                    onclick="document.getElementById('program-modal').remove()">
+
+                                İptal
+
+                            </button>
+
+                            <button type="button"
+                                    class="program-modal-butonu program-modal-ekle"
+                                        onclick="programDersiniKaydet(${dersId}, '${programHtmlGuvenliMetin(dersAdi)}')">
+
+                                Ekle
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+        document.body.appendChild(modal);
+
+        document.getElementById("program-baslangic-saat").value = "8";
+        document.getElementById("program-baslangic-dakika").value = "0";
+
+        document.getElementById("program-bitis-saat").value = "9";
+        document.getElementById("program-bitis-dakika").value = "0";
+    }
+
+
+    /* GÜVENLİ METİN */
+
+    function programHtmlGuvenliMetin(metin) {
+
+        return metin
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    /* DERSLERİ ÇİZ */
+
+    function programDersleriniCiz() {
+
+        const hucreler =
+            document.querySelectorAll(
+                ".program-hucre"
+            );
+
+        hucreler.forEach(hucre => {
+            hucre.innerHTML = "";
+        });
+
+
+        programDersleri.forEach(ders => {
+
+            const hucre =
+                document.querySelector(
+                    `.program-hucre[data-gun="${ders.gun}"][data-saat="${ders.saat}"]`
+                );
+
+            if (!hucre) {
+                return;
+            }
+
+
+            const baslangicToplam =
+                ders.saat * 60 + ders.dakika;
+
+            const bitisToplam =
+                ders.bitisSaat * 60 + ders.bitisDakika;
+
+
+            const sureDakika =
+                bitisToplam - baslangicToplam;
+
+
+            const dakikaKonumu =
+                (ders.dakika / 60) * 42;
+
+
+            const blokYuksekligi =
+                (sureDakika / 60) * 42;
+
+
+            const blok =
+                document.createElement("div");
+
+            blok.className =
+                "program-ders-blogu";
+
+
+            blok.style.top =
+                `${3 + dakikaKonumu}px`;
+
+            blok.style.height =
+                `${Math.max(20, blokYuksekligi)}px`;
+
+
+            blok.innerHTML = `
+            <div class="program-ders-blogu-adi">
+                ${programHtmlGuvenliMetin(ders.dersAdi)}
+            </div>
+
+            <div class="program-ders-blogu-saati">
+                ${String(ders.saat).padStart(2, "0")}:
+                ${String(ders.dakika).padStart(2, "0")}
+                -
+                ${String(ders.bitisSaat).padStart(2, "0")}:
+                ${String(ders.bitisDakika).padStart(2, "0")}
+            </div>
+
+            ${programDersSilModu
+                    ? `
+                        <button type="button"
+                                class="program-ders-sil-butonu"
+                                onclick="programDersiniSil(${programDersleri.indexOf(ders)})">
+                            Sil
+                        </button>
+                      `
+                    : ""
+                }
+        `;
+
+
+            hucre.appendChild(blok);
+
+        });
+    }
+
+
+    async function programDersiniSil(index) {
+
+        const ders = programDersleri[index];
+
+        if (!ders || !ders.id) {
+            return;
+        }
+
+        try {
+
+            const cevap =
+                await fetch("/Ogrenci/DersProgramiSil", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+
+                    body:
+                        "id=" +
+                        encodeURIComponent(ders.id)
+                });
+
+            const veri =
+                await cevap.json();
+
+            if (!veri.success) {
+
+                alert(
+                    veri.message ||
+                    "Ders programdan silinemedi."
+                );
+
+                return;
+            }
+
+            programDersleri.splice(index, 1);
+
+            programDersleriniCiz();
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+            alert(
+                "Ders programdan silinirken bir hata oluştu."
+            );
+        }
+    }
+
+    async function programDersiniKaydet(dersId, dersAdi) {
+
+        const gun =
+            parseInt(
+                document.getElementById("program-gun").value
+            );
+
+        const baslangicSaat =
+            parseInt(
+                document.getElementById("program-baslangic-saat").value
+            );
+
+        const baslangicDakika =
+            parseInt(
+                document.getElementById("program-baslangic-dakika").value
+            );
+
+        const bitisSaat =
+            parseInt(
+                document.getElementById("program-bitis-saat").value
+            );
+
+        const bitisDakika =
+            parseInt(
+                document.getElementById("program-bitis-dakika").value
+            );
+
+        const baslangicToplam =
+            baslangicSaat * 60 +
+            baslangicDakika;
+
+        const bitisToplam =
+            bitisSaat * 60 +
+            bitisDakika;
+
+        if (bitisToplam <= baslangicToplam) {
+
+            alert(
+                "Bitiş saati başlangıç saatinden sonra olmalıdır."
+            );
+
+            return;
+        }
+
+        try {
+
+            const cevap =
+                await fetch("/Ogrenci/DersProgramiEkle", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+
+                    body:
+                        "dersId=" +
+                        encodeURIComponent(dersId) +
+
+                        "&gun=" +
+                        encodeURIComponent(gun) +
+
+                        "&baslangicSaat=" +
+                        encodeURIComponent(baslangicSaat) +
+
+                        "&baslangicDakika=" +
+                        encodeURIComponent(baslangicDakika) +
+
+                        "&bitisSaat=" +
+                        encodeURIComponent(bitisSaat) +
+
+                        "&bitisDakika=" +
+                        encodeURIComponent(bitisDakika)
+                });
+
+            const veri =
+                await cevap.json();
+
+            if (!veri.success) {
+
+                alert(
+                    veri.message ||
+                    "Ders programa eklenemedi."
+                );
+
+                return;
+            }
+
+            programDersleri.push({
+
+                id: veri.id,
+
+                dersId: dersId,
+
+                dersAdi: dersAdi,
+
+                gun: gun,
+
+                saat: baslangicSaat,
+
+                dakika: baslangicDakika,
+
+                bitisSaat: bitisSaat,
+
+                bitisDakika: bitisDakika
+
+            });
+
+            programDersleriniCiz();
+
+            const modal =
+                document.getElementById("program-modal");
+
+            if (modal) {
+
+                const bildirim =
+                    document.createElement("div");
+
+                bildirim.textContent =
+                    "Ders başarıyla eklendi.";
+
+                bildirim.style.marginTop = "15px";
+                bildirim.style.textAlign = "center";
+                bildirim.style.color = "#2e7d32";
+                bildirim.style.fontWeight = "600";
+
+                modal
+                    .querySelector(".program-modal")
+                    .appendChild(bildirim);
+
+                setTimeout(() => {
+
+                    if (bildirim) {
+                        bildirim.remove();
+                    }
+
+                }, 3000);
+            }
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+            alert(
+                "Ders programa eklenirken bir hata oluştu."
+            );
+        }
+    }
+
+
+    /* DERS EKLE */
+
+    function dersEkleAc() {
+
+        document.querySelector(".icerik-yer-tutucu").innerHTML = `
+
+                    <div class="ders-ekle-icerik">
+
+                        <h2 class="ders-ekle-baslik">
+                            Ders Ekle
+                        </h2>
+
+                        <p class="ders-ekle-aciklama">
+                            Derslerini ekleyerek kişisel ders listeni oluşturabilirsin.
+                        </p>
+
+                        <div class="ders-ekle-duzeni">
+
+                            <div class="ders-ekle-karti">
+
+                                <h3 class="ders-ekle-kart-baslik">
+                                    Yeni Ders
+                                </h3>
+
+                                <label class="ders-girdi-etiketi">
+                                    Ders Adı
+                                </label>
+
+                                <input id="ders-adi"
+                                       class="ders-girdisi"
+                                       type="text"
+                                       maxlength="100">
+
+                                <button class="ders-kaydet-butonu"
+                                        type="button"
+                                        onclick="dersKaydet()">
+                                    Kaydet
+                                </button>
+
+                                <div id="ders-mesaji"
+                                     class="ders-mesaji">
+                                </div>
+
+                            </div>
+
+                            <div class="ders-ekle-karti">
+
+                                <h3 class="ders-ekle-kart-baslik">
+                                    Derslerim
+                                </h3>
+
+                                <div id="ders-listesi"
+                                     class="ders-listesi">
+
+                                    <div class="ders-bos">
+                                        Dersler yükleniyor...
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+        document
+            .getElementById("ders-adi")
+            .addEventListener("keydown", function (olay) {
+
+                if (olay.key === "Enter") {
+                    dersKaydet();
+                }
+
+            });
+
+        dersleriGetir();
+    }
+
+
+    async function dersleriGetir() {
+
+        const liste =
+            document.getElementById("ders-listesi");
+
+        if (!liste) {
+            return;
+        }
+
+        try {
+
+            const cevap =
+                await fetch("/Ogrenci/DersleriGetir");
+
+            const veri =
+                await cevap.json();
+
+            if (!veri.success ||
+                !veri.dersler ||
+                veri.dersler.length === 0) {
+
+                liste.innerHTML = `
+                            <div class="ders-bos">
+                                Henüz ders eklenmemiş.
+                            </div>
+                        `;
+
+                return;
+            }
+
+            liste.innerHTML = "";
+
+            veri.dersler.forEach(ders => {
+
+                const oge =
+                    document.createElement("div");
+
+                oge.className =
+                    "ders-ogesi";
+
+                const ad =
+                    document.createElement("span");
+
+                ad.textContent =
+                    ders.dersAdi;
+
+                const buton =
+                    document.createElement("button");
+
+                buton.type = "button";
+
+                buton.className =
+                    "ders-sil-butonu";
+
+                buton.textContent =
+                    "Sil";
+
+                buton.onclick = function () {
+
+                    dersSil(
+                        ders.id,
+                        ders.dersAdi
+                    );
+
+                };
+
+                oge.appendChild(ad);
+                oge.appendChild(buton);
+
+                liste.appendChild(oge);
+
+            });
+
+        }
+        catch (hata) {
+
+            liste.innerHTML = `
+                        <div class="ders-bos">
+                            Dersler yüklenirken bir hata oluştu.
+                        </div>
+                    `;
+
+            console.error(hata);
+        }
+    }
+
+
+    async function dersSil(id, dersAdi) {
+
+        const onay =
+            confirm(
+                `"${dersAdi}" dersini silmek istediğinize emin misiniz?`
+            );
+
+        if (!onay) {
+            return;
+        }
+
+        try {
+
+            const cevap =
+                await fetch("/Ogrenci/DersSil", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+
+                    body:
+                        "id=" +
+                        encodeURIComponent(id)
+                });
+
+            const veri =
+                await cevap.json();
+
+            if (!veri.success) {
+
+                alert(
+                    veri.message ||
+                    "Ders silinemedi."
+                );
+
+                return;
+            }
+
+            await dersleriGetir();
+
+
+            /*
+             * Ders Derslerim'den silindiyse,
+             * programda bulunan aynı dersleri de siliyoruz.
+             */
+
+            programDersleri =
+                programDersleri.filter(ders => {
+
+                    return ders.dersAdi !== dersAdi;
+
+                });
+
+
+            if (
+                document.querySelector(
+                    ".program-tablo-kapsayici"
+                )
+            ) {
+
+                programDersleriniCiz();
+
+            }
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+            alert(
+                "Ders silinirken bir hata oluştu."
+            );
+        }
+    }
+
+
+    async function dersKaydet() {
+
+        const girdi =
+            document.getElementById("ders-adi");
+
+        const mesaj =
+            document.getElementById("ders-mesaji");
+
+        if (!girdi || !mesaj) {
+            return;
+        }
+
+        const dersAdi =
+            girdi.value.trim();
+
+        if (dersAdi === "") {
+
+            mesaj.textContent =
+                "Ders adı boş olamaz.";
+
+            mesaj.style.display = "block";
+
+            return;
+        }
+
+        try {
+
+            const cevap =
+                await fetch("/Ogrenci/DersEkle", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+
+                    body:
+                        "dersAdi=" +
+                        encodeURIComponent(dersAdi)
+                });
+
+            const veri =
+                await cevap.json();
+
+            if (!veri.success) {
+
+                mesaj.textContent =
+                    veri.message || "Ders eklenemedi.";
+
+                mesaj.style.display = "block";
+
+                return;
+            }
+
+            girdi.value = "";
+
+            mesaj.textContent =
+                "Ders başarıyla eklendi.";
+
+            mesaj.style.display = "block";
+
+            await dersleriGetir();
+
+            setTimeout(() => {
+
+                if (mesaj) {
+                    mesaj.style.display = "none";
+                }
+
+            }, 2000);
+
+        }
+        catch (hata) {
+
+            mesaj.textContent =
+                "Ders eklenirken bir hata oluştu.";
+
+            mesaj.style.display = "block";
+
+            console.error(hata);
+        }
+    }
+
+
+    function akademikTakipAc() {
+
+        document.querySelector(".icerik-yer-tutucu").innerHTML = `
+
+                <div class="akademik-icerik">
+
+                    <div class="akademik-sekmeleri">
+
+                        <button id="sekme-konu-takip"
+                                class="akademik-sekmesi"
+                                type="button"
+                                onclick="akademikSekmeAc('konu-takip')">
+                            Konu Takip
+                        </button>
+
+                        <button id="sekme-odevlerim"
+                                class="akademik-sekmesi"
+                                type="button"
+                                onclick="akademikSekmeAc('odevlerim')">
+                            Ödevlerim
+                        </button>
+
+                        <button id="sekme-ders-notlari"
+                                class="akademik-sekmesi"
+                                type="button"
+                                onclick="akademikSekmeAc('ders-notlari')">
+                            Ders Notları
+                        </button>
+
+                    </div>
+
+
+
+                    <div id="akademik-icerik-alani"
+                         class="akademik-bos-icerik">
+
+                    </div>
+
+                </div>
+
+            `;
+
+        akademikSekmeAc("konu-takip");
+    }
+
+
+    function akademikSekmeAc(sekme) {
+
+        document.querySelectorAll(".akademik-sekmesi").forEach(button => {
+            button.classList.remove("aktif");
+        });
+
+
+        if (sekme === "konu-takip") {
+
+            document
+                .getElementById("sekme-konu-takip")
+                .classList.add("aktif");
+
+            konulariGetirVeGoster();
+        }
+
+
+        else if (sekme === "konu-ekle") {
+
+            konuEkleEkraniniGoster();
+        }
+
+
+
+        else if (sekme === "odevlerim") {
+            document.getElementById("sekme-odevlerim").classList.add("aktif");
+            odevlerimEkraniniGoster();
+        }
+
+
+        else if (sekme === "ders-notlari") {
+
+            document
+                .getElementById("sekme-ders-notlari")
+                .classList.add("aktif");
+
+            document.getElementById("akademik-icerik-alani").innerHTML = `
+                    <div class="akademik-bos-icerik">
+                        Ders Notları bölümü daha sonra yapılacak.
+                    </div>
+                `;
+        }
+    }
+
+    function odevlerimEkraniniGoster() {
+        document.getElementById("akademik-icerik-alani").innerHTML = `
+                <div class="odevlerim-icerik">
+
+                    <div class="odevlerim-ust">
+                        <h2>Ödevlerim</h2>
+
+                        <button class="odev-ekle-btn" onclick="odevEkleFormunuGoster()">
+                            + Ödev Ekle
+                        </button>
+                    </div>
+
+                    <div id="odev-ekle-alani"></div>
+
+                    <div id="aktif-odevler-alani">
+                        <div class="akademik-bos-icerik">
+                            Ödevler yükleniyor...
+                        </div>
+                    </div>
+                   <div id="gecmis-odevler-alani"></div>
+                </div>
+            `;
+
+        aktifOdevleriGetir();
+        gecmisOdevleriGetir();
+    }
+
+
+    async function odeviTamamla(id) {
+
+        const onay = confirm("Bu ödevi tamamlandı olarak işaretlemek istiyor musun?");
+
+        if (!onay) {
+            return;
+        }
+
+        try {
+
+            const formData = new URLSearchParams();
+            formData.append("id", id);
+
+            const response = await fetch("/Ogrenci/OdevTamamla", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formData.toString()
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                aktifOdevleriGetir();
+            }
+            else {
+                alert(data.message);
+            }
+
+        }
+        catch (error) {
+
+            console.error("Ödev tamamlanırken hata:", error);
+            alert("Ödev tamamlanırken bir hata oluştu.");
+
+        }
+    }
+
+
+    async function odeviSil(id) {
+
+        const onay = confirm("Bu ödevi silmek istediğine emin misin?");
+
+        if (!onay) {
+            return;
+        }
+
+        try {
+
+            const formData = new URLSearchParams();
+            formData.append("id", id);
+
+            const response = await fetch("/Ogrenci/OdevSil", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formData.toString()
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                aktifOdevleriGetir();
+            }
+            else {
+                alert(data.message);
+            }
+
+        }
+        catch (error) {
+
+            console.error("Ödev silinirken hata:", error);
+            alert("Ödev silinirken bir hata oluştu.");
+
+        }
+    }
+
+
+    async function aktifOdevleriGetir() {
+
+        const alan = document.getElementById("aktif-odevler-alani");
+
+        try {
+
+            const response = await fetch("/Ogrenci/OdevleriGetir");
+            const data = await response.json();
+
+            if (!data.success) {
+                alan.innerHTML = `
+                        <div class="akademik-bos-icerik">
+                            Ödevler alınamadı.
+                        </div>
+                    `;
+                return;
+            }
+
+            const aktifOdevler = data.odevler.filter(o => !o.tamamlandi);
+
+            if (aktifOdevler.length === 0) {
+                alan.innerHTML = `
+                        <div class="akademik-bos-icerik">
+                            Henüz aktif ödev bulunmuyor.
+                        </div>
+                    `;
+                return;
+            }
+
+            const gruplar = {};
+
+            aktifOdevler.forEach(odev => {
+
+                if (!gruplar[odev.dersAdi]) {
+                    gruplar[odev.dersAdi] = [];
+                }
+
+                gruplar[odev.dersAdi].push(odev);
+
+            });
+
+            let html = `
+                    <div class="aktif-odevler-baslik">
+                        Aktif Ödevler
+                    </div>
+                `;
+
+            Object.keys(gruplar).forEach(dersAdi => {
+
+                html += `
+                        <div class="odev-ders-grubu">
+
+                            <div class="odev-ders-baslik">
+                                ${dersAdi}
+                            </div>
+
+                            <div class="odev-listesi">
+                    `;
+
+                gruplar[dersAdi].forEach(odev => {
+
+                    const tarih = new Date(odev.teslimTarihi);
+
+                    const gun = String(tarih.getDate()).padStart(2, "0");
+                    const ay = String(tarih.getMonth() + 1).padStart(2, "0");
+                    const yil = tarih.getFullYear();
+
+                    html += `
+                            <div class="odev-karti">
+
+                                <div class="odev-bilgi">
+
+                                    <div class="odev-adi">
+                                        ${odev.odevAdi}
+                                    </div>
+
+                                    <div class="odev-tarih">
+                                        Teslim: ${gun}.${ay}.${yil}
+                                    </div>
+
+                                </div>
+
+                                <div class="odev-islemler">
+
+                                    <button class="odev-tamamla-btn"
+                                            onclick="odeviTamamla(${odev.id})">
+                                        Tamamlandı
+                                    </button>
+
+                                    <button class="odev-sil-btn"
+                                            onclick="odeviSil(${odev.id})">
+                                        Sil
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        `;
+
+                });
+
+                html += `
+                            </div>
+                        </div>
+                    `;
+
+            });
+
+            alan.innerHTML = html;
+
+        }
+        catch (error) {
+
+            console.error("Ödevler alınamadı:", error);
+
+            alan.innerHTML = `
+                    <div class="akademik-bos-icerik">
+                        Ödevler yüklenirken hata oluştu.
+                    </div>
+                `;
+        }
+    }
+
+    async function yaklasanOdevleriGetir() {
+
+        try {
+
+            const response = await fetch("/Ogrenci/YaklasanOdevleriGetir");
+            const data = await response.json();
+
+            if (!data.success || !data.odevler || data.odevler.length === 0) {
+                return;
+            }
+
+            let html = `
+                    <div class="yaklasan-odevler-kutu">
+
+                        <button class="yaklasan-odevler-kapat"
+                                onclick="yaklasanOdevleriKapat()">
+                            ×
+                        </button>
+
+                        <div class="yaklasan-odevler-baslik">
+                            Yaklaşan Ödevler
+                        </div>
+                `;
+
+            data.odevler.forEach(odev => {
+
+                const tarih = new Date(odev.teslimTarihi);
+
+                const gun = String(tarih.getDate()).padStart(2, "0");
+                const ay = String(tarih.getMonth() + 1).padStart(2, "0");
+                const yil = tarih.getFullYear();
+
+                html += `
+                        <div class="yaklasan-odev">
+
+                            <div class="yaklasan-odev-bilgi">
+
+                                <div class="yaklasan-odev-adi">
+                                    ${odev.odevAdi}
+                                </div>
+
+                                <div class="yaklasan-odev-ders">
+                                    ${odev.dersAdi}
+                                </div>
+
+                            </div>
+
+                            <div class="yaklasan-odev-tarih">
+                                ${gun}.${ay}.${yil}
+                            </div>
+
+                        </div>
+                    `;
+            });
+
+            html += `
+                    </div>
+                `;
+
+            const eskiKutu = document.getElementById("yaklasan-odevler-alani");
+
+            if (eskiKutu) {
+                eskiKutu.remove();
+            }
+
+            document.body.insertAdjacentHTML("beforeend", `
+                    <div id="yaklasan-odevler-alani">
+                        ${html}
+                    </div>
+                `);
+
+        }
+        catch (error) {
+
+            console.error("Yaklaşan ödevler alınamadı:", error);
+
+        }
+    }
+
+
+    function yaklasanOdevleriKapat() {
+
+        const alan = document.getElementById("yaklasan-odevler-alani");
+
+        if (alan) {
+            alan.remove();
+        }
+    }
+
+
+    function gecmisOdevleriGoster() {
+
+        const alan = document.getElementById("gecmis-odevler-alani");
+
+        if (!alan) {
+            return;
+        }
+
+        const liste = document.getElementById("gecmis-odevler-listesi");
+        const ok = document.getElementById("gecmis-odevler-ok");
+
+        if (liste.style.display === "none") {
+
+            liste.style.display = "block";
+            ok.textContent = "▲";
+
+        } else {
+
+            liste.style.display = "none";
+            ok.textContent = "▼";
+
+        }
+    }
+
+
+    async function gecmisOdevleriGetir() {
+
+        const alan = document.getElementById("gecmis-odevler-alani");
+
+        if (!alan) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch("/Ogrenci/OdevleriGetir");
+            const data = await response.json();
+
+            if (!data.success) {
+                alan.innerHTML = "";
+                return;
+            }
+
+            const gecmisOdevler = data.odevler
+                .filter(o => o.tamamlandi)
+                .sort((a, b) => {
+                    return new Date(b.tamamlanmaTarihi) -
+                        new Date(a.tamamlanmaTarihi);
+                })
+                .slice(0, 10);
+
+            let html = `
+                    <div class="gecmis-odevler-kutu">
+
+                        <div class="gecmis-odevler-baslik"
+                             onclick="gecmisOdevleriGoster()">
+
+                            <span>Geçmiş Ödevler</span>
+
+                            <span id="gecmis-odevler-ok">▼</span>
+
+                        </div>
+
+                        <div id="gecmis-odevler-listesi"
+                             style="display: none;">
+                `;
+
+            if (gecmisOdevler.length === 0) {
+
+                html += `
+                        <div class="gecmis-odev-yok">
+                            Henüz tamamlanan ödev bulunmuyor.
+                        </div>
+                    `;
+
+            } else {
+
+                gecmisOdevler.forEach(odev => {
+
+                    const teslimTarihi = new Date(odev.teslimTarihi);
+                    const tamamlanmaTarihi = new Date(odev.tamamlanmaTarihi);
+
+                    const teslimGun = String(teslimTarihi.getDate()).padStart(2, "0");
+                    const teslimAy = String(teslimTarihi.getMonth() + 1).padStart(2, "0");
+                    const teslimYil = teslimTarihi.getFullYear();
+
+                    const tamamGun = String(tamamlanmaTarihi.getDate()).padStart(2, "0");
+                    const tamamAy = String(tamamlanmaTarihi.getMonth() + 1).padStart(2, "0");
+                    const tamamYil = tamamlanmaTarihi.getFullYear();
+
+                    html += `
+                            <div class="gecmis-odev-karti">
+
+                                <div class="gecmis-odev-bilgi">
+
+                                    <div class="gecmis-odev-adi">
+                                        ${odev.odevAdi}
+                                    </div>
+
+                                    <div class="gecmis-odev-ders">
+                                        ${odev.dersAdi}
+                                    </div>
+
+                                    <div class="gecmis-odev-tarih">
+                                        Teslim: ${teslimGun}.${teslimAy}.${teslimYil}
+                                        &nbsp; • &nbsp;
+                                        Tamamlandı: ${tamamGun}.${tamamAy}.${tamamYil}
+                                    </div>
+
+                                </div>
+
+                                <div class="gecmis-odev-durum">
+                                    ✓ Tamamlandı
+                                </div>
+
+                            </div>
+                        `;
+
+                });
+
+            }
+
+            html += `
+                        </div>
+                    </div>
+                `;
+
+            alan.innerHTML = html;
+
+        }
+        catch (error) {
+
+            console.error("Geçmiş ödevler alınamadı:", error);
+
+            alan.innerHTML = "";
+        }
+    }
+
+
+
+    async function odevEkleFormunuGoster() {
+
+        const alan = document.getElementById("odev-ekle-alani");
+
+        alan.innerHTML = `
+                <div class="odev-ekle-form">
+
+                    <h3>Yeni Ödev Ekle</h3>
+
+                    <div class="odev-form-satir">
+
+                        <label>Ders</label>
+
+                        <select id="odev-ders-secimi"
+                                onchange="odevDersSecimiDegisti()">
+
+                            <option value="">Ders seçiniz...</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div id="farkli-ders-alani"
+                         style="display:none;">
+
+                        <div class="odev-form-satir">
+
+                            <label>Ders Adı</label>
+
+                            <input type="text"
+                                   id="odev-farkli-ders"
+                                   placeholder="Ders adını yazın">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="odev-form-satir">
+
+                        <label>Ödev Adı</label>
+
+                        <input type="text"
+                               id="odev-adi"
+                               placeholder="Ödev adını yazın">
+
+                    </div>
+
+
+                    <div class="odev-form-satir">
+
+                        <label>Teslim Tarihi</label>
+
+                        <input type="date"
+                               id="odev-teslim-tarihi">
+
+                    </div>
+
+
+                    <div class="odev-form-alt">
+
+                        <button class="odev-kaydet-btn"
+                                onclick="odeviKaydet()">
+
+                            Ödevi Ekle
+
+                        </button>
+
+                        <button class="odev-iptal-btn"
+                                onclick="odevFormunuKapat()">
+
+                            İptal
+
+                        </button>
+
+                    </div>
+
+                    <div id="odev-form-mesaj"></div>
+
+                </div>
+            `;
+
+        await odevDersleriniGetir();
+    }
+
+
+    async function odevDersleriniGetir() {
+
+        const select = document.getElementById("odev-ders-secimi");
+
+        if (!select) return;
+
+        try {
+
+            const response = await fetch("/Ogrenci/DersleriGetir");
+
+            const data = await response.json();
+
+            if (!data.success) {
+                return;
+            }
+
+            data.dersler.forEach(ders => {
+
+                const option = document.createElement("option");
+
+                option.value = ders.id;
+                option.textContent = ders.dersAdi;
+
+                select.appendChild(option);
+
+            });
+
+            const farkliOption = document.createElement("option");
+
+            farkliOption.value = "farkli";
+            farkliOption.textContent = "Farklı bir ders...";
+
+            select.appendChild(farkliOption);
+
+        }
+        catch (error) {
+
+            console.error("Dersler alınamadı:", error);
+
+        }
+    }
+
+
+    function odevDersSecimiDegisti() {
+
+        const select = document.getElementById("odev-ders-secimi");
+
+        const farkliAlan = document.getElementById("farkli-ders-alani");
+
+        if (select.value === "farkli") {
+
+            farkliAlan.style.display = "block";
+
+        }
+        else {
+
+            farkliAlan.style.display = "none";
+
+        }
+    }
+
+
+    function odevFormunuKapat() {
+
+        document.getElementById("odev-ekle-alani").innerHTML = "";
+
+    }
+
+
+    async function odeviKaydet() {
+
+        const dersSecimi =
+            document.getElementById("odev-ders-secimi").value;
+
+        const odevAdi =
+            document.getElementById("odev-adi").value.trim();
+
+        const teslimTarihi =
+            document.getElementById("odev-teslim-tarihi").value;
+
+        const mesaj =
+            document.getElementById("odev-form-mesaj");
+
+
+        if (!dersSecimi) {
+            mesaj.innerHTML =
+                `<div class="odev-hata">Lütfen ders seçin.</div>`;
+            return;
+        }
+
+
+        if (!odevAdi) {
+            mesaj.innerHTML =
+                `<div class="odev-hata">Ödev adı boş olamaz.</div>`;
+            return;
+        }
+
+
+        if (!teslimTarihi) {
+            mesaj.innerHTML =
+                `<div class="odev-hata">Teslim tarihi seçin.</div>`;
+            return;
+        }
+
+
+        let dersId = "";
+        let dersAdi = "";
+
+
+        if (dersSecimi === "farkli") {
+
+            dersAdi =
+                document.getElementById("odev-farkli-ders").value.trim();
+
+            if (!dersAdi) {
+                mesaj.innerHTML =
+                    `<div class="odev-hata">Ders adını yazın.</div>`;
+                return;
+            }
+
+        } else {
+
+            dersId = dersSecimi;
+
+            const select =
+                document.getElementById("odev-ders-secimi");
+
+            dersAdi =
+                select.options[select.selectedIndex].text;
+        }
+
+
+        const formData = new URLSearchParams();
+
+        formData.append("dersId", dersId);
+        formData.append("dersAdi", dersAdi);
+        formData.append("odevAdi", odevAdi);
+        formData.append("teslimTarihi", teslimTarihi);
+
+
+        try {
+
+            const response = await fetch("/Ogrenci/OdevEkle", {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+                body: formData.toString()
+            });
+
+
+            const data = await response.json();
+
+
+            if (data.success) {
+
+                mesaj.innerHTML =
+                    `<div class="odev-basari">
+                            Ödev başarıyla eklendi.
+                        </div>`;
+
+                // Listeyi anında güncelle
+                await aktifOdevleriGetir();
+                await gecmisOdevleriGetir();
+                await yaklasanOdevleriGetir();
+
+
+                // Formu temizle
+                document.getElementById("odev-adi").value = "";
+                document.getElementById("odev-teslim-tarihi").value = "";
+                document.getElementById("odev-ders-secimi").value = "";
+
+                document.getElementById("farkli-ders-alani").style.display =
+                    "none";
+
+            } else {
+
+                mesaj.innerHTML =
+                    `<div class="odev-hata">
+                            ${data.message}
+                        </div>`;
+            }
+
+        }
+        catch (error) {
+
+            console.error("Ödev eklenirken hata:", error);
+
+            mesaj.innerHTML =
+                `<div class="odev-hata">
+                        Ödev eklenirken bir hata oluştu.
+                    </div>`;
+        }
+    }
+
+
+    async function konuEkleEkraniniGoster() {
+
+        const alan = document.getElementById("akademik-icerik-alani");
+
+        alan.innerHTML = `
+                <div class="konu-ekle-alani">
+
+                    <h3>Konu Ekle</h3>
+
+                    <select id="konu-ders-secimi">
+                        <option value="">Ders seçiniz</option>
+                    </select>
+
+                    <input type="text"
+                           id="konu-adi"
+                           placeholder="Konu adı">
+
+                    <button type="button"
+                            onclick="konuKaydet()">
+                        Konuyu Ekle
+                    </button>
+
+                    <div id="konu-ekle-mesaj"></div>
+
+                    <div class="konu-ekle-mevcut">
+
+                        <h3>Eklenen Konular</h3>
+
+                        <div id="konu-ekle-listesi">
+                            Konular yükleniyor...
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+
+        try {
+
+            const cevap = await fetch('/Ogrenci/DersleriGetir');
+
+            const sonuc = await cevap.json();
+
+            if (sonuc.success) {
+
+                const select = document.getElementById("konu-ders-secimi");
+
+                sonuc.dersler.forEach(ders => {
+
+                    const option = document.createElement("option");
+
+                    option.value = ders.id;
+                    option.textContent = ders.dersAdi;
+
+                    select.appendChild(option);
+
+                });
+            }
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+        }
+
+        konuEkleListesiniGetir();
+    }
+
+
+    async function konuKaydet() {
+
+        const dersId = document.getElementById("konu-ders-secimi").value;
+        const konuAdi = document.getElementById("konu-adi").value.trim();
+        const mesaj = document.getElementById("konu-ekle-mesaj");
+
+        if (!dersId) {
+
+            mesaj.textContent = "Lütfen ders seçiniz.";
+            return;
+        }
+
+        if (!konuAdi) {
+
+            mesaj.textContent = "Lütfen konu adı giriniz.";
+            return;
+        }
+
+        const veri = new URLSearchParams();
+
+        veri.append("dersId", dersId);
+        veri.append("konuAdi", konuAdi);
+
+        try {
+
+            const cevap = await fetch('/Ogrenci/KonuEkle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: veri.toString()
+            });
+
+            const sonuc = await cevap.json();
+
+            if (sonuc.success) {
+
+                mesaj.textContent = "Konu başarıyla eklendi.";
+
+                document.getElementById("konu-adi").value = "";
+
+                konuEkleListesiniGetir();
+
+            }
+            else {
+
+                mesaj.textContent = sonuc.message;
+
+            }
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+            mesaj.textContent = "Bir hata oluştu.";
+
+        }
+    }
+
+
+    async function konuEkleListesiniGetir() {
+
+        const alan = document.getElementById("konu-ekle-listesi");
+
+        if (!alan) {
+            return;
+        }
+
+        try {
+
+            const cevap = await fetch('/Ogrenci/KonulariGetir');
+
+            const sonuc = await cevap.json();
+
+            if (!sonuc.success || sonuc.konular.length === 0) {
+
+                alan.innerHTML = `
+                        <div class="konu-ekle-bos">
+                            Henüz konu eklenmemiş.
+                        </div>
+                    `;
+
+                return;
+            }
+
+
+            const dersler = {};
+
+
+            sonuc.konular.forEach(konu => {
+
+                if (!dersler[konu.dersId]) {
+
+                    dersler[konu.dersId] = {
+                        dersAdi: konu.dersAdi,
+                        konular: []
+                    };
+
+                }
+
+                dersler[konu.dersId].konular.push(konu);
+
+            });
+
+
+            let html = "";
+
+
+            Object.values(dersler).forEach(ders => {
+
+                html += `
+
+                        <div class="konu-ekle-ders-karti">
+
+                            <div class="konu-ekle-ders-baslik">
+
+                                ${programHtmlGuvenliMetin(ders.dersAdi)}
+
+                            </div>
+
+                            <div class="konu-ekle-ders-konulari">
+                    `;
+
+
+                ders.konular.forEach(konu => {
+
+                    html += `
+
+                            <div class="konu-ekle-konu-satiri">
+
+                                <span>
+                                    ${programHtmlGuvenliMetin(konu.konuAdi)}
+                                </span>
+
+                                <button type="button"
+                                        class="konu-sil-butonu"
+                                        onclick="konuSil(${konu.id})">
+                                    Sil
+                                </button>
+
+                            </div>
+
+                        `;
+
+                });
+
+
+                html += `
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+            });
+
+
+            alan.innerHTML = html;
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+            alan.innerHTML = `
+                    <div class="konu-ekle-bos">
+                        Konular yüklenirken bir hata oluştu.
+                    </div>
+                `;
+        }
+    }
+
+
+    async function konuSil(id) {
+
+        const onay = confirm("Bu konuyu silmek istediğinize emin misiniz?");
+
+        if (!onay) {
+            return;
+        }
+
+        const veri = new URLSearchParams();
+
+        veri.append("id", id);
+
+        try {
+
+            const cevap = await fetch('/Ogrenci/KonuSil', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: veri.toString()
+            });
+
+            const sonuc = await cevap.json();
+
+            if (sonuc.success) {
+
+                konuEkleListesiniGetir();
+
+            }
+            else {
+
+                alert(sonuc.message);
+
+            }
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+            alert("Konu silinirken bir hata oluştu.");
+
+        }
+    }
+
+
+    async function konulariGetirVeGoster() {
+
+        const alan =
+            document.getElementById("akademik-icerik-alani");
+
+
+        const konuEkleButonu = `
+                    <div class="akademik-konu-ekle-butonu-alani">
+                        <button class="akademik-konu-ekle-butonu"
+                                type="button"
+                                onclick="akademikSekmeAc('konu-ekle')">
+                            + Konu Ekle / Kaldır
+                        </button>
+                    </div>
+                `;
+
+        alan.innerHTML = `
+                    <div class="konu-takip-alani">
+                        <div class="akademik-bos-icerik">
+                            Konular yükleniyor...
+                        </div>
+                        ${konuEkleButonu}
+                    </div>
+                `;
+
+
+        try {
+
+            const cevap =
+                await fetch('/Ogrenci/KonulariGetir');
+
+            const sonuc =
+                await cevap.json();
+
+
+            let html = `<div class="konu-takip-alani">`;
+
+
+            if (!sonuc.success || sonuc.konular.length === 0) {
+
+                html += `
+                            <div class="akademik-bos-icerik">
+                                Henüz konu eklenmemiş.
+                            </div>
+                            ${konuEkleButonu}
+                        </div>
+                        `;
+
+                alan.innerHTML = html;
+
+                return;
+            }
+
+
+            html += `<div class="konu-kartlari">`;
+
+            const dersler = {};
+
+
+            sonuc.konular.forEach(konu => {
+
+                if (!dersler[konu.dersId]) {
+
+                    dersler[konu.dersId] = {
+                        dersAdi: konu.dersAdi,
+                        konular: []
+                    };
+
+                }
+
+                dersler[konu.dersId].konular.push(konu);
+
+            });
+
+
+            Object.values(dersler).forEach(ders => {
+
+                const tamamlanan =
+                    ders.konular.filter(k => k.tamamlandi).length;
+
+                const toplam =
+                    ders.konular.length;
+
+                const yuzde =
+                    toplam === 0
+                        ? 0
+                        : Math.round((tamamlanan / toplam) * 100);
+
+
+                html += `
+
+                            <div class="konu-ders-karti">
+
+                                <div class="konu-ders-baslik">
+
+                                    <strong>
+                                        ${programHtmlGuvenliMetin(ders.dersAdi)}
+                                    </strong>
+
+                                    <span>
+                                        ${tamamlanan}/${toplam} tamamlandı (%${yuzde})
+                                    </span>
+
+                                </div>
+
+
+                                <div class="konu-listesi">
+
+                        `;
+
+
+                ders.konular.forEach(konu => {
+
+                    html += `
+
+                                <label class="konu-satiri">
+
+                                    <input type="checkbox"
+                                           ${konu.tamamlandi ? "checked" : ""}
+                                           onchange="konuTamamlandiDegistir(${konu.id})">
+
+                                    <span class="${konu.tamamlandi ? "konu-tamamlandi" : ""}">
+                                        ${programHtmlGuvenliMetin(konu.konuAdi)}
+                                    </span>
+
+                                </label>
+
+                            `;
+
+                });
+
+
+                html += `
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+            });
+
+
+            html += `
+                        </div>
+                        ${konuEkleButonu}
+                    </div>
+                    `;
+
+            alan.innerHTML = html;
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+            alan.innerHTML = `
+                        <div class="konu-takip-alani">
+                            <div class="akademik-bos-icerik">
+                                Konular yüklenirken bir hata oluştu.
+                            </div>
+                            ${konuEkleButonu}
+                        </div>
+                    `;
+        }
+    }
+
+
+    async function konuTamamlandiDegistir(id) {
+
+        const veri = new URLSearchParams();
+
+        veri.append("id", id);
+
+        try {
+
+            const cevap = await fetch('/Ogrenci/KonuTamamlandiDegistir', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: veri.toString()
+            });
+
+            const sonuc = await cevap.json();
+
+            if (sonuc.success) {
+
+                konulariGetirVeGoster();
+
+            }
+
+        }
+        catch (hata) {
+
+            console.error(hata);
+
+        }
+    }
+
+
+    /* YKS */
+
+    function yksAc() {
+
+        document.querySelector(".icerik-yer-tutucu").innerHTML = `
+
+                            <div class="yks-icerik">
+
+                                <div class="yks-sekmeleri">
+
+                                    <button id="sekme-geri-sayim"
+                                            class="yks-sekmesi aktif"
+                                            type="button"
+                                            onclick="yksGeriSayimAc()">
+                                        Sınava geri sayım
+                                    </button>
+
+                                    <button id="sekme-net"
+                                            class="yks-sekmesi"
+                                            type="button"
+                                            onclick="netHesaplamaAc()">
+                                        Net Hesaplama
+                                    </button>
+
+                                    <button id="sekme-pomodoro"
+                                            class="yks-sekmesi"
+                                            type="button"
+                                            onclick="pomodoroAc()">
+                                        Pomodoro
+                                    </button>
+
+                                </div>
+
+                                <div id="yks-icerik-alani"></div>
+
+                            </div>
+                        `;
+
+        yksGeriSayimAc();
+    }
+
+
+    function aktifSekmeBelirle(sekmeId) {
+
+        document.querySelectorAll(".yks-sekmesi").forEach(sekme => {
+            sekme.classList.remove("aktif");
+        });
+
+        document.getElementById(sekmeId).classList.add("aktif");
+    }
+
+
+    /* GERİ SAYIM */
+
+    function yksGeriSayimAc() {
+
+        aktifSekmeBelirle("sekme-geri-sayim");
+
+        document.getElementById("yks-icerik-alani").innerHTML = `
+
+                            <div class="geri-sayim-alani">
+
+                                <p class="geri-sayim-etiketi">
+                                    YKS
+                                </p>
+
+                                <h2>
+                                    Sınava kalan gün
+                                </h2>
+
+                                <div class="geri-sayim-kutulari">
+
+                                    <div class="geri-sayim-kutusu">
+                                        <span id="yks-gun"
+                                              class="geri-sayim-sayisi">000</span>
+                                        <span class="geri-sayim-birimi">GÜN</span>
+                                    </div>
+
+                                    <div class="geri-sayim-kutusu">
+                                        <span id="yks-saat"
+                                              class="geri-sayim-sayisi">00</span>
+                                        <span class="geri-sayim-birimi">SAAT</span>
+                                    </div>
+
+                                    <div class="geri-sayim-kutusu">
+                                        <span id="yks-dakika"
+                                              class="geri-sayim-sayisi">00</span>
+                                        <span class="geri-sayim-birimi">DAKİKA</span>
+                                    </div>
+
+                                    <div class="geri-sayim-kutusu">
+                                        <span id="yks-saniye"
+                                              class="geri-sayim-sayisi">00</span>
+                                        <span class="geri-sayim-birimi">SANİYE</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="sinav-tarihleri">
+
+                                    <div class="sinav-tarihi">
+
+                                        <span class="sinav-tarihi-basligi">
+                                            TYT
+                                        </span>
+
+                                        <span class="sinav-tarihi-metni">
+                                            19 Haziran 2027
+                                        </span>
+
+                                    </div>
+
+                                    <div class="sinav-tarihi">
+
+                                        <span class="sinav-tarihi-basligi">
+                                            AYT
+                                        </span>
+
+                                        <span class="sinav-tarihi-metni">
+                                            20 Haziran 2027
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        `;
+
+        yksGeriSayiminiGuncelle();
+    }
+
+
+    function yksGeriSayiminiGuncelle() {
+
+        const sinavTarihi =
+            new Date("2027-06-19T10:00:00");
+
+        const simdi =
+            new Date();
+
+        const fark =
+            sinavTarihi - simdi;
+
+        const gunElementi =
+            document.getElementById("yks-gun");
+
+        if (!gunElementi) {
+            return;
+        }
+
+        if (fark <= 0) {
+
+            document.getElementById("yks-gun").textContent = "000";
+            document.getElementById("yks-saat").textContent = "00";
+            document.getElementById("yks-dakika").textContent = "00";
+            document.getElementById("yks-saniye").textContent = "00";
+
+            return;
+        }
+
+        const gun =
+            Math.floor(
+                fark /
+                (1000 * 60 * 60 * 24)
+            );
+
+        const saat =
+            Math.floor(
+                (fark /
+                    (1000 * 60 * 60)) % 24
+            );
+
+        const dakika =
+            Math.floor(
+                (fark /
+                    (1000 * 60)) % 60
+            );
+
+        const saniye =
+            Math.floor(
+                (fark / 1000) % 60
+            );
+
+        document.getElementById("yks-gun").textContent =
+            String(gun).padStart(3, '0');
+
+        document.getElementById("yks-saat").textContent =
+            String(saat).padStart(2, '0');
+
+        document.getElementById("yks-dakika").textContent =
+            String(dakika).padStart(2, '0');
+
+        document.getElementById("yks-saniye").textContent =
+            String(saniye).padStart(2, '0');
+    }
+
+
+    setInterval(() => {
+
+        if (document.getElementById("yks-gun")) {
+            yksGeriSayiminiGuncelle();
+        }
+
+    }, 1000);
+
+
+    /* NET HESAPLAMA */
+
+    function netHesaplamaAc() {
+
+        aktifSekmeBelirle("sekme-net");
+
+        document.getElementById("yks-icerik-alani").innerHTML = `
+
+                            <div class="net-icerik">
+
+                                <h2 class="net-baslik">
+                                    Net Hesaplama
+                                </h2>
+
+                                <p class="net-aciklama">
+                                    Net hesaplamayı kullanabilmeniz için doğru ve yanlış sayılarınızı girebilirsiniz.
+                                    4 yanlış 1 doğruyu götürür.
+                                </p>
+
+                                <div class="net-bolumleri">
+
+                                    <div class="net-karti">
+
+                                        <h3 class="net-kart-basligi">
+                                            TYT
+                                        </h3>
+
+                                        <p class="net-kart-alt-basligi">
+                                            TYT toplam net hesabı
+                                        </p>
+
+                                        <div class="ders-baslik-satiri">
+
+                                            <span>Ders</span>
+                                            <span>Doğru</span>
+                                            <span>Yanlış</span>
+                                            <span>Net</span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Türkçe (40)
+                                            </span>
+
+                                            <input id="tyt-turkce-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="40"
+                                                   placeholder="0">
+
+                                            <input id="tyt-turkce-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="40"
+                                                   placeholder="0">
+
+                                            <span id="tyt-turkce-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Sosyal Bilimler (20)
+                                            </span>
+
+                                            <input id="tyt-sosyal-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="20"
+                                                   placeholder="0">
+
+                                            <input id="tyt-sosyal-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="20"
+                                                   placeholder="0">
+
+                                            <span id="tyt-sosyal-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Temel Matematik (40)
+                                            </span>
+
+                                            <input id="tyt-mat-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="40"
+                                                   placeholder="0">
+
+                                            <input id="tyt-mat-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="40"
+                                                   placeholder="0">
+
+                                            <span id="tyt-mat-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Fen Bilimleri (20)
+                                            </span>
+
+                                            <input id="tyt-fen-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="20"
+                                                   placeholder="0">
+
+                                            <input id="tyt-fen-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="20"
+                                                   placeholder="0">
+
+                                            <span id="tyt-fen-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="net-sonucu">
+
+                                            <div class="net-sonuc-satiri net-sonuc-toplam">
+
+                                                <span class="net-sonuc-etiketi">
+                                                    TOPLAM NET
+                                                </span>
+
+                                                <span id="tyt-toplam"
+                                                      class="net-sonuc-degeri">
+                                                    0,00
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="net-islemleri">
+
+                                            <button class="net-islem-butonu hesapla-butonu"
+                                                    type="button"
+                                                    onclick="tytHesapla()">
+                                                Hesapla
+                                            </button>
+
+                                            <button class="net-islem-butonu kaydet-butonu"
+                                                    type="button"
+                                                    onclick="netSonucuKaydet('TYT')">
+                                                Sonucu Kaydet
+                                            </button>
+
+                                        </div>
+
+                                        <div id="tyt-kaydet-mesaji"
+                                             class="kaydet-mesaji">
+                                            Sonuç kaydetme özelliği daha sonra aktif edilecek.
+                                        </div>
+
+                                    </div>
+
+                                    <div class="net-karti">
+
+                                        <h3 class="net-kart-basligi">
+                                            AYT
+                                        </h3>
+
+                                        <p class="net-kart-alt-basligi">
+                                            AYT toplam net hesabı
+                                        </p>
+
+                                        <div class="ders-baslik-satiri">
+
+                                            <span>Ders</span>
+                                            <span>Doğru</span>
+                                            <span>Yanlış</span>
+                                            <span>Net</span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Matematik (40)
+                                            </span>
+
+                                            <input id="ayt-mat-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="40"
+                                                   placeholder="0">
+
+                                            <input id="ayt-mat-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="40"
+                                                   placeholder="0">
+
+                                            <span id="ayt-mat-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-basligi">
+                                            Fen Bilimleri
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Fizik (14)
+                                            </span>
+
+                                            <input id="ayt-fizik-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="14"
+                                                   placeholder="0">
+
+                                            <input id="ayt-fizik-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="14"
+                                                   placeholder="0">
+
+                                            <span id="ayt-fizik-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Kimya (13)
+                                            </span>
+
+                                            <input id="ayt-kimya-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="13"
+                                                   placeholder="0">
+
+                                            <input id="ayt-kimya-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="13"
+                                                   placeholder="0">
+
+                                            <span id="ayt-kimya-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Biyoloji (13)
+                                            </span>
+
+                                            <input id="ayt-biyo-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="13"
+                                                   placeholder="0">
+
+                                            <input id="ayt-biyo-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="13"
+                                                   placeholder="0">
+
+                                            <span id="ayt-biyo-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-basligi">
+                                            Türk Dili ve Edebiyatı
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Türk Dili ve Edebiyatı (24)
+                                            </span>
+
+                                            <input id="ayt-edebiyat-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="24"
+                                                   placeholder="0">
+
+                                            <input id="ayt-edebiyat-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="24"
+                                                   placeholder="0">
+
+                                            <span id="ayt-edebiyat-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-basligi">
+                                            Sosyal Bilimler-1
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Tarih-1 (10)
+                                            </span>
+
+                                            <input id="ayt-tarih1-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="10"
+                                                   placeholder="0">
+
+                                            <input id="ayt-tarih1-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="10"
+                                                   placeholder="0">
+
+                                            <span id="ayt-tarih1-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Coğrafya-1 (6)
+                                            </span>
+
+                                            <input id="ayt-cografya1-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="6"
+                                                   placeholder="0">
+
+                                            <input id="ayt-cografya1-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="6"
+                                                   placeholder="0">
+
+                                            <span id="ayt-cografya1-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-basligi">
+                                            Sosyal Bilimler-2
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Tarih-2 (11)
+                                            </span>
+
+                                            <input id="ayt-tarih2-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="11"
+                                                   placeholder="0">
+
+                                            <input id="ayt-tarih2-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="11"
+                                                   placeholder="0">
+
+                                            <span id="ayt-tarih2-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Coğrafya-2 (11)
+                                            </span>
+
+                                            <input id="ayt-cografya2-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="11"
+                                                   placeholder="0">
+
+                                            <input id="ayt-cografya2-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="11"
+                                                   placeholder="0">
+
+                                            <span id="ayt-cografya2-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Felsefe Grubu (12)
+                                            </span>
+
+                                            <input id="ayt-felsefe-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="12"
+                                                   placeholder="0">
+
+                                            <input id="ayt-felsefe-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="12"
+                                                   placeholder="0">
+
+                                            <span id="ayt-felsefe-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="ders-satiri">
+
+                                            <span class="ders-adi">
+                                                Din Kültürü (6)
+                                            </span>
+
+                                            <input id="ayt-din-dogru"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="6"
+                                                   placeholder="0">
+
+                                            <input id="ayt-din-yanlis"
+                                                   class="net-girdisi"
+                                                   type="number"
+                                                   min="0"
+                                                   max="6"
+                                                   placeholder="0">
+
+                                            <span id="ayt-din-sonuc"
+                                                  class="ders-net">
+                                                0,00
+                                            </span>
+
+                                        </div>
+
+                                        <div class="net-sonucu">
+
+                                            <div class="net-sonuc-satiri">
+
+                                                <span class="net-sonuc-etiketi">
+                                                    Sayısal Net
+                                                </span>
+
+                                                <span id="ayt-sayisal"
+                                                      class="net-sonuc-degeri">
+                                                    0,00
+                                                </span>
+
+                                            </div>
+
+                                            <div class="net-sonuc-satiri">
+
+                                                <span class="net-sonuc-etiketi">
+                                                    Eşit Ağırlık Net
+                                                </span>
+
+                                                <span id="ayt-esit-agirlik"
+                                                      class="net-sonuc-degeri">
+                                                    0,00
+                                                </span>
+
+                                            </div>
+
+                                            <div class="net-sonuc-satiri">
+
+                                                <span class="net-sonuc-etiketi">
+                                                    Sözel Net
+                                                </span>
+
+                                                <span id="ayt-sozel"
+                                                      class="net-sonuc-degeri">
+                                                    0,00
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="net-islemleri">
+
+                                            <button class="net-islem-butonu hesapla-butonu"
+                                                    type="button"
+                                                    onclick="aytHesapla()">
+                                                Hesapla
+                                            </button>
+
+                                            <button class="net-islem-butonu kaydet-butonu"
+                                                    type="button"
+                                                    onclick="netSonucuKaydet('AYT')">
+                                                Sonucu Kaydet
+                                            </button>
+
+                                        </div>
+
+                                        <div id="ayt-kaydet-mesaji"
+                                             class="kaydet-mesaji">
+                                            Sonuç kaydetme özelliği daha sonra aktif edilecek.
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        `;
+    }
+
+
+    function netHesapla(dogruId, yanlisId) {
+
+        const dogru =
+            parseFloat(
+                document.getElementById(dogruId).value
+            ) || 0;
+
+        const yanlis =
+            parseFloat(
+                document.getElementById(yanlisId).value
+            ) || 0;
+
+        return dogru - (yanlis / 4);
+    }
+
+
+    function netBicimlendir(deger) {
+
+        if (deger < 0) {
+            deger = 0;
+        }
+
+        return deger
+            .toFixed(2)
+            .replace(".", ",");
+    }
+
+
+    function tytHesapla() {
+
+        const turkce =
+            netHesapla(
+                "tyt-turkce-dogru",
+                "tyt-turkce-yanlis"
+            );
+
+        const sosyal =
+            netHesapla(
+                "tyt-sosyal-dogru",
+                "tyt-sosyal-yanlis"
+            );
+
+        const matematik =
+            netHesapla(
+                "tyt-mat-dogru",
+                "tyt-mat-yanlis"
+            );
+
+        const fen =
+            netHesapla(
+                "tyt-fen-dogru",
+                "tyt-fen-yanlis"
+            );
+
+        const toplam =
+            turkce +
+            sosyal +
+            matematik +
+            fen;
+
+        document.getElementById(
+            "tyt-turkce-sonuc"
+        ).textContent =
+            netBicimlendir(turkce);
+
+        document.getElementById(
+            "tyt-sosyal-sonuc"
+        ).textContent =
+            netBicimlendir(sosyal);
+
+        document.getElementById(
+            "tyt-mat-sonuc"
+        ).textContent =
+            netBicimlendir(matematik);
+
+        document.getElementById(
+            "tyt-fen-sonuc"
+        ).textContent =
+            netBicimlendir(fen);
+
+        document.getElementById(
+            "tyt-toplam"
+        ).textContent =
+            netBicimlendir(toplam);
+    }
+
+
+    function aytHesapla() {
+
+        const matematik =
+            netHesapla(
+                "ayt-mat-dogru",
+                "ayt-mat-yanlis"
+            );
+
+        const fizik =
+            netHesapla(
+                "ayt-fizik-dogru",
+                "ayt-fizik-yanlis"
+            );
+
+        const kimya =
+            netHesapla(
+                "ayt-kimya-dogru",
+                "ayt-kimya-yanlis"
+            );
+
+        const biyoloji =
+            netHesapla(
+                "ayt-biyo-dogru",
+                "ayt-biyo-yanlis"
+            );
+
+        const edebiyat =
+            netHesapla(
+                "ayt-edebiyat-dogru",
+                "ayt-edebiyat-yanlis"
+            );
+
+        const tarih1 =
+            netHesapla(
+                "ayt-tarih1-dogru",
+                "ayt-tarih1-yanlis"
+            );
+
+        const cografya1 =
+            netHesapla(
+                "ayt-cografya1-dogru",
+                "ayt-cografya1-yanlis"
+            );
+
+        const tarih2 =
+            netHesapla(
+                "ayt-tarih2-dogru",
+                "ayt-tarih2-yanlis"
+            );
+
+        const cografya2 =
+            netHesapla(
+                "ayt-cografya2-dogru",
+                "ayt-cografya2-yanlis"
+            );
+
+        const felsefe =
+            netHesapla(
+                "ayt-felsefe-dogru",
+                "ayt-felsefe-yanlis"
+            );
+
+        const din =
+            netHesapla(
+                "ayt-din-dogru",
+                "ayt-din-yanlis"
+            );
+
+
+        document.getElementById(
+            "ayt-mat-sonuc"
+        ).textContent =
+            netBicimlendir(matematik);
+
+        document.getElementById(
+            "ayt-fizik-sonuc"
+        ).textContent =
+            netBicimlendir(fizik);
+
+        document.getElementById(
+            "ayt-kimya-sonuc"
+        ).textContent =
+            netBicimlendir(kimya);
+
+        document.getElementById(
+            "ayt-biyo-sonuc"
+        ).textContent =
+            netBicimlendir(biyoloji);
+
+        document.getElementById(
+            "ayt-edebiyat-sonuc"
+        ).textContent =
+            netBicimlendir(edebiyat);
+
+        document.getElementById(
+            "ayt-tarih1-sonuc"
+        ).textContent =
+            netBicimlendir(tarih1);
+
+        document.getElementById(
+            "ayt-cografya1-sonuc"
+        ).textContent =
+            netBicimlendir(cografya1);
+
+        document.getElementById(
+            "ayt-tarih2-sonuc"
+        ).textContent =
+            netBicimlendir(tarih2);
+
+        document.getElementById(
+            "ayt-cografya2-sonuc"
+        ).textContent =
+            netBicimlendir(cografya2);
+
+        document.getElementById(
+            "ayt-felsefe-sonuc"
+        ).textContent =
+            netBicimlendir(felsefe);
+
+        document.getElementById(
+            "ayt-din-sonuc"
+        ).textContent =
+            netBicimlendir(din);
+
+
+        const sayisal =
+            matematik +
+            fizik +
+            kimya +
+            biyoloji;
+
+        const esitAgirlik =
+            matematik +
+            edebiyat +
+            tarih1 +
+            cografya1;
+
+        const sozel =
+            edebiyat +
+            tarih1 +
+            cografya1 +
+            tarih2 +
+            cografya2 +
+            felsefe +
+            din;
+
+
+        document.getElementById(
+            "ayt-sayisal"
+        ).textContent =
+            netBicimlendir(sayisal);
+
+        document.getElementById(
+            "ayt-esit-agirlik"
+        ).textContent =
+            netBicimlendir(esitAgirlik);
+
+        document.getElementById(
+            "ayt-sozel"
+        ).textContent =
+            netBicimlendir(sozel);
+    }
+
+
+    function netSonucuKaydet(sinav) {
+
+        const mesajId =
+            sinav === "TYT"
+                ? "tyt-kaydet-mesaji"
+                : "ayt-kaydet-mesaji";
+
+        const mesaj =
+            document.getElementById(mesajId);
+
+        mesaj.style.display = "block";
+
+        setTimeout(() => {
+
+            mesaj.style.display = "none";
+
+        }, 3000);
+    }
+
+
+    /* POMODORO */
+
+    function pomodoroAc() {
+
+        aktifSekmeBelirle("sekme-pomodoro");
+
+        document.getElementById(
+            "yks-icerik-alani"
+        ).innerHTML = `
+
+                            <div class="geri-sayim-alani">
+
+                                <p id="pomodoro-modu"
+                                   class="geri-sayim-etiketi">
+                                    ÇALIŞMA
+                                </p>
+
+                                <h2 id="pomodoro-basligi">
+                                    Pomodoro
+                                </h2>
+
+                                <div class="geri-sayim-kutulari">
+
+                                    <div class="geri-sayim-kutusu">
+
+                                        <span id="pomodoro-dakika"
+                                              class="geri-sayim-sayisi">
+                                            25
+                                        </span>
+
+                                        <span class="geri-sayim-birimi">
+                                            DAKİKA
+                                        </span>
+
+                                    </div>
+
+                                    <div class="geri-sayim-kutusu">
+
+                                        <span id="pomodoro-saniye"
+                                              class="geri-sayim-sayisi">
+                                            00
+                                        </span>
+
+                                        <span class="geri-sayim-birimi">
+                                            SANİYE
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="net-islemleri"
+                                     style="width: 300px; margin-top: 30px;">
+
+                                    <button id="pomodoro-baslat"
+                                            class="net-islem-butonu hesapla-butonu"
+                                            type="button"
+                                            onclick="pomodoroBaslatDuraklat()">
+                                        Başlat
+                                    </button>
+
+                                    <button id="pomodoro-sifirla"
+                                            class="net-islem-butonu kaydet-butonu"
+                                            type="button"
+                                            onclick="pomodoroSifirla()">
+                                        Sıfırla
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        `;
+    }
+
+
+    let pomodoroZaman = null;
+
+    let pomodoroDakika = 25;
+    let pomodoroSaniye = 0;
+
+    let pomodoroCalisiyor = false;
+    let pomodoroMola = false;
+
+
+    function pomodoroBaslatDuraklat() {
+
+        if (pomodoroCalisiyor) {
+
+            clearInterval(pomodoroZaman);
+
+            pomodoroZaman = null;
+
+            pomodoroCalisiyor = false;
+
+            const buton =
+                document.getElementById("pomodoro-baslat");
+
+            if (buton) {
+                buton.textContent = "Devam Et";
+            }
+
+            return;
+        }
+
+        pomodoroCalisiyor = true;
+
+        const buton =
+            document.getElementById("pomodoro-baslat");
+
+        if (buton) {
+            buton.textContent = "Duraklat";
+        }
+
+        pomodoroZaman =
+            setInterval(pomodoroGuncelle, 1000);
+    }
+
+
+    function pomodoroGuncelle() {
+
+        if (!document.getElementById("pomodoro-dakika")) {
+
+            clearInterval(pomodoroZaman);
+
+            pomodoroZaman = null;
+            pomodoroCalisiyor = false;
+
+            return;
+        }
+
+        if (pomodoroSaniye > 0) {
+
+            pomodoroSaniye--;
+
+        }
+        else if (pomodoroDakika > 0) {
+
+            pomodoroDakika--;
+
+            pomodoroSaniye = 59;
+
+        }
+        else {
+
+            pomodoroModunuDegistir();
+
+            return;
+        }
+
+        pomodoroEkraniniGuncelle();
+    }
+
+
+    function pomodoroModunuDegistir() {
+
+        clearInterval(pomodoroZaman);
+
+        pomodoroZaman = null;
+
+        pomodoroCalisiyor = false;
+
+        if (!pomodoroMola) {
+
+            pomodoroMola = true;
+
+            pomodoroDakika = 5;
+            pomodoroSaniye = 0;
+
+            const mod =
+                document.getElementById("pomodoro-modu");
+
+            const baslik =
+                document.getElementById("pomodoro-basligi");
+
+            const buton =
+                document.getElementById("pomodoro-baslat");
+
+            if (mod) {
+                mod.textContent = "MOLA";
+            }
+
+            if (baslik) {
+                baslik.textContent = "Mola Zamanı";
+            }
+
+            if (buton) {
+                buton.textContent = "Başlat";
+            }
+
+        }
+        else {
+
+            pomodoroMola = false;
+
+            pomodoroDakika = 25;
+            pomodoroSaniye = 0;
+
+            const mod =
+                document.getElementById("pomodoro-modu");
+
+            const baslik =
+                document.getElementById("pomodoro-basligi");
+
+            const buton =
+                document.getElementById("pomodoro-baslat");
+
+            if (mod) {
+                mod.textContent = "ÇALIŞMA";
+            }
+
+            if (baslik) {
+                baslik.textContent = "Pomodoro";
+            }
+
+            if (buton) {
+                buton.textContent = "Başlat";
+            }
+        }
+
+        pomodoroEkraniniGuncelle();
+    }
+
+
+    function pomodoroEkraniniGuncelle() {
+
+        const dakika =
+            document.getElementById("pomodoro-dakika");
+
+        const saniye =
+            document.getElementById("pomodoro-saniye");
+
+        if (!dakika || !saniye) {
+            return;
+        }
+
+        dakika.textContent =
+            String(pomodoroDakika).padStart(2, "0");
+
+        saniye.textContent =
+            String(pomodoroSaniye).padStart(2, "0");
+    }
+
+
+    function pomodoroSifirla() {
+
+        clearInterval(pomodoroZaman);
+
+        pomodoroZaman = null;
+
+        pomodoroCalisiyor = false;
+        pomodoroMola = false;
+
+        pomodoroDakika = 25;
+        pomodoroSaniye = 0;
+
+        const mod =
+            document.getElementById("pomodoro-modu");
+
+        const baslik =
+            document.getElementById("pomodoro-basligi");
+
+        const buton =
+            document.getElementById("pomodoro-baslat");
+
+        if (mod) {
+            mod.textContent = "ÇALIŞMA";
+        }
+
+        if (baslik) {
+            baslik.textContent = "Pomodoro";
+        }
+
+        if (buton) {
+            buton.textContent = "Başlat";
+        }
+
+        pomodoroEkraniniGuncelle();
+    }
+
+
+</script>

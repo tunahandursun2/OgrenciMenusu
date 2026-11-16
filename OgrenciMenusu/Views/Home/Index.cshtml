@@ -1,0 +1,506 @@
+
+@{
+    ViewData["Title"] = "Öğrenci Programı";
+}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        background: #f5f7fb;
+        color: #18212f;
+    }
+
+    .student-home {
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    /* NAVBAR */
+
+    .topbar {
+        height: 78px;
+        padding: 0 7%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255,255,255,0.92);
+        border-bottom: 1px solid #e9edf3;
+        position: relative;
+        z-index: 5;
+    }
+
+    .brand {
+        text-decoration: none;
+        color: #18212f;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-login,
+    .nav-register {
+        padding: 11px 19px;
+        border-radius: 9px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 650;
+        transition: .2s ease;
+    }
+
+    .nav-login {
+        color: #303948;
+    }
+
+        .nav-login:hover {
+            background: #f0f2f6;
+        }
+
+    .nav-register {
+        color: white;
+        background: #252b38;
+    }
+
+        .nav-register:hover {
+            background: #151a23;
+            transform: translateY(-1px);
+        }
+
+    /* HERO */
+
+    .hero {
+        position: relative;
+        min-height: 650px;
+        display: flex;
+        align-items: center;
+        padding: 80px 7%;
+        overflow: hidden;
+    }
+
+    .hero-content {
+        width: 55%;
+        position: relative;
+        z-index: 2;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 13px;
+        border-radius: 30px;
+        background: #ececff;
+        color: #5657d8;
+        font-size: 12px;
+        font-weight: 750;
+        letter-spacing: .6px;
+        margin-bottom: 22px;
+    }
+
+    .eyebrow-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #696af5;
+    }
+
+    .hero h1 {
+        margin: 0;
+        max-width: 700px;
+        font-size: clamp(44px, 5vw, 72px);
+        line-height: 1.04;
+        letter-spacing: -2.5px;
+        font-weight: 800;
+    }
+
+    .gradient-text {
+        background: linear-gradient(90deg, #5758ee, #a15cf4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+        max-width: 570px;
+        margin: 25px 0 0;
+        color: #667085;
+        font-size: 17px;
+        line-height: 1.75;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 13px;
+        margin-top: 34px;
+    }
+
+    .hero-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px 25px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 700;
+        transition: .25s ease;
+    }
+
+    .primary-button {
+        color: white;
+        background: linear-gradient(135deg, #5758ee, #8258ef);
+        box-shadow: 0 12px 25px rgba(91, 88, 238, .25);
+    }
+
+        .primary-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 17px 30px rgba(91, 88, 238, .32);
+        }
+
+    .secondary-button {
+        color: #303948;
+        background: white;
+        border: 1px solid #dfe3ea;
+    }
+
+        .secondary-button:hover {
+            transform: translateY(-3px);
+            border-color: #c8ced8;
+            box-shadow: 0 10px 25px rgba(20, 30, 50, .08);
+        }
+
+    /* SAĞ TARAFTAKİ TEK DAİRE */
+
+    .hero-visual {
+        position: absolute;
+        right: 7%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 400px;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .main-circle {
+        width: 360px;
+        height: 360px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #dedfff, #f0e3ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .circle-content {
+        width: 265px;
+        height: 265px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 20px 50px rgba(41, 48, 70, .12);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 30px;
+    }
+
+    .circle-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 16px;
+        background: #eeefff;
+        color: #5758ee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        margin-bottom: 15px;
+    }
+
+    .circle-content h2 {
+        margin: 0;
+        font-size: 23px;
+        font-weight: 800;
+    }
+
+    .circle-content p {
+        margin: 8px 0 0;
+        color: #7a8392;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* ALT KARTLAR */
+
+    .features {
+        padding: 0 7% 80px;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .feature-card {
+        padding: 26px;
+        background: white;
+        border: 1px solid #e6e9ef;
+        border-radius: 16px;
+        transition: .25s ease;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(30, 40, 60, .08);
+        }
+
+    .feature-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eeefff;
+        color: #5758ee;
+        font-size: 14px;
+        font-weight: 800;
+        margin-bottom: 17px;
+    }
+
+    .feature-card h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+    }
+
+    .feature-card p {
+        margin: 0;
+        color: #7a8392;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* RESPONSIVE */
+
+    @@media (max-width: 950px) {
+        .hero {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+
+        .hero-content {
+            width: 100%;
+        }
+
+        .hero-visual {
+            display: none;
+        }
+
+        .feature-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .topbar {
+            padding: 0 5%;
+        }
+
+        .nav-login {
+            display: none;
+        }
+
+        .hero {
+            padding: 55px 6%;
+            min-height: 600px;
+        }
+
+            .hero h1 {
+                font-size: 45px;
+            }
+
+        .hero-description {
+            font-size: 15px;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+        }
+
+        .hero-button {
+            width: 100%;
+        }
+
+        .features {
+            padding-left: 6%;
+            padding-right: 6%;
+        }
+    }
+</style>
+
+<div class="student-home">
+
+    <header class="topbar">
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="brand">
+            Öğrenci Programı
+        </a>
+
+        <div class="nav-actions">
+
+            <a asp-controller="Hesap"
+               asp-action="Giris"
+               class="nav-login">
+                Giriş Yap
+            </a>
+
+            <a asp-controller="Hesap"
+               asp-action="Kayit"
+               class="nav-register">
+                Kayıt Ol
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                ÖĞRENCİLER İÇİN TASARLANDI
+            </div>
+
+            <h1>
+                Öğrencilik hayatını
+                <span class="gradient-text">tek yerden yönet.</span>
+            </h1>
+
+            <p class="hero-description">
+                Derslerini, bilgilerini ve öğrenci işlemlerini
+                daha düzenli bir şekilde takip edebileceğin
+                modern öğrenci platformu.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a asp-controller="Hesap"
+                   asp-action="Giris"
+                   class="hero-button primary-button">
+                    Giriş Yap →
+                </a>
+
+                <a asp-controller="Hesap"
+                   asp-action="Kayit"
+                   class="hero-button secondary-button">
+                    Hesap Oluştur
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-visual">
+
+            <div class="main-circle">
+
+                <div class="circle-content">
+
+                    <div class="circle-icon">
+                        ✓
+                    </div>
+
+                    <h2>Öğrenci Paneli</h2>
+
+                    <p>
+                        Tüm öğrenci işlemlerin
+                        tek bir yerde.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="features">
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    01
+                </div>
+
+                <h3>Düzenli</h3>
+
+                <p>
+                    Öğrenci işlemlerini ve bilgilerini
+                    tek bir yerde düzenli şekilde tut.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    02
+                </div>
+
+                <h3>Kolay Kullanım</h3>
+
+                <p>
+                    Gereksiz karmaşadan uzak,
+                    anlaşılır ve kullanımı kolay bir arayüz.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    03
+                </div>
+
+                <h3>Kişisel Alanın</h3>
+
+                <p>
+                    Hesabına giriş yaparak sana özel
+                    öğrenci alanına eriş.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>

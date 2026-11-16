@@ -1,0 +1,270 @@
+@model OgrenciMenusu.Models.GirisViewModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<style>
+    body {
+        background: #f5f7fb !important;
+        color: #18212f;
+    }
+
+    .auth-page {
+        min-height: calc(100vh - 78px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 20px;
+        background: #f5f7fb;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 520px;
+        background: #ffffff;
+        border: 1px solid #e6e9ef;
+        border-radius: 20px;
+        padding: 42px;
+        box-shadow: 0 20px 50px rgba(41, 48, 70, .08);
+    }
+
+    .top-line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin-bottom: 28px;
+    }
+
+    .back-link {
+        position: absolute;
+        left: 0;
+        color: #697386;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+        .back-link:hover {
+            color: #5758ee;
+        }
+
+    .eyebrow {
+        margin: 0;
+        color: #5758ee;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .7px;
+    }
+
+    .auth-card h1 {
+        margin: 0;
+        font-size: 31px;
+        letter-spacing: -1px;
+        font-weight: 800;
+        color: #18212f;
+    }
+
+    .subtitle {
+        margin: 10px 0 30px;
+        color: #7a8392;
+        font-size: 14px;
+    }
+
+    .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .form-field {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        align-items: center;
+        gap: 14px;
+    }
+
+        .form-field label {
+            color: #303948;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .form-field input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 14px;
+            border: 1px solid #dfe3ea;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #18212f;
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+            .form-field input::placeholder {
+                color: #a2a9b5;
+            }
+
+            .form-field input:focus {
+                border-color: #7778ee;
+                box-shadow: 0 0 0 4px rgba(87, 88, 238, .10);
+            }
+
+    .field-error {
+        grid-column: 2;
+        color: #d14343;
+        font-size: 12px;
+        margin-top: -10px;
+    }
+
+    .primary-button {
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        margin-top: 4px;
+        color: white;
+        background: linear-gradient(135deg, #5758ee, #8258ef);
+        font-size: 15px;
+        font-weight: 750;
+        cursor: pointer;
+        box-shadow: 0 10px 22px rgba(91, 88, 238, .20);
+        transition: .25s;
+    }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(91, 88, 238, .28);
+        }
+
+    .auth-switch {
+        margin: 24px 0 0;
+        text-align: center;
+        color: #7a8392;
+        font-size: 13px;
+    }
+
+        .auth-switch a {
+            color: #5758ee;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+            .auth-switch a:hover {
+                color: #4142d4;
+            }
+
+    .validation-summary {
+        color: #d14343;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    @@media (max-width: 600px) {
+        .auth-page {
+            padding: 30px 15px;
+        }
+
+        .auth-card {
+            padding: 30px 24px;
+        }
+
+        .form-field {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .field-error {
+            grid-column: 1;
+            margin-top: -10px;
+        }
+
+        .top-line {
+            justify-content: center;
+        }
+    }
+</style>
+
+<main class="auth-page">
+
+    <section class="auth-card login-card">
+
+        <div class="top-line">
+
+            <a class="back-link"
+               asp-controller="Home"
+               asp-action="Index">
+                ← Geri
+            </a>
+
+            <p class="eyebrow">
+                ÖĞRENCİ MENÜSÜ
+            </p>
+
+        </div>
+
+        <h1>
+             Hoş geldiniz
+        </h1>
+
+        <p class="subtitle">
+            Hesabına giriş yapmak için bilgilerini yaz.
+        </p>
+
+        <form asp-action="Giris"
+              method="post"
+              class="auth-form">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="validation-summary">
+            </div>
+
+            <div class="form-field">
+
+                <label asp-for="KullaniciAdi"></label>
+
+                <input asp-for="KullaniciAdi"
+                       autocomplete="username"
+                       placeholder="Kullanıcı adı" />
+
+                <span asp-validation-for="KullaniciAdi"
+                      class="field-error">
+                </span>
+
+            </div>
+
+            <div class="form-field">
+
+                <label asp-for="Sifre"></label>
+
+                <input asp-for="Sifre"
+                       autocomplete="current-password"
+                       placeholder="Şifre" />
+
+                <span asp-validation-for="Sifre"
+                      class="field-error">
+                </span>
+
+            </div>
+
+            <button class="primary-button" type="submit">
+                Giriş yap
+            </button>
+
+        </form>
+
+        <p class="auth-switch">
+            Hesabın yok mu?
+            <a asp-action="Kayit">Kayıt ol</a>
+        </p>
+
+    </section>
+
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
